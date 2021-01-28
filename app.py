@@ -1,5 +1,5 @@
 import dash
-from jupyter_dash import JupyterDash
+#from jupyter_dash import JupyterDash
 import dash_core_components as dcc
 import dash_html_components as html
 import plotly.express as px
@@ -20,8 +20,8 @@ df2 = ALL_data_fit_values
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 ## Start Juptyer_dash app and link to style sheet
-app = JupyterDash(__name__, external_stylesheets=external_stylesheets)
-#app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+#app = JupyterDash(__name__, external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 ## PP slider values
 S_MIN = min(df2['PP'])
@@ -288,5 +288,5 @@ def on_trace_click(clickData):
     
 # Open app in-line with notebook
 if __name__ == '__main__':
-    app.run_server(mode='inline')
-    #app.run_server(debug=True)
+    #app.run_server(mode='inline')
+    app.run_server(debug=True)
