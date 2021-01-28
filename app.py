@@ -1,5 +1,5 @@
 import dash
-#from jupyter_dash import JupyterDash
+from jupyter_dash import JupyterDash
 import dash_core_components as dcc
 import dash_html_components as html
 import plotly.express as px
@@ -13,32 +13,15 @@ ALL_data_fit_values = pd.read_csv('https://raw.githubusercontent.com/rach6230/Da
 # Create col of A/C:
 ALL_data_fit_values["V/nT"] =  abs(ALL_data_fit_values['A'])/abs(ALL_data_fit_values['C'])
 
-# Import and combine all systematic data
-#filenames=[]
-#for i in range(1, 47):
-#    value = str(i)
-#    title = "https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Data/All_SYSTEMATIC_DATA_V1-"
-#    csv = ".csv"
-#    name = title + value + csv
-#    filenames.append(name)
-
-#df_list=[]
-#for i in filenames:
-#    df = pd.read_csv(i)
-#    df_list.append(df)
-    
-#ALL_data = pd.concat(df_list)
-ALL_data= pd.read_csv("https://archive.org/download/all-systematic-data-v-1/All_SYSTEMATIC_DATA_V1.csv")
 ## Load data
-df = ALL_data
 df2 = ALL_data_fit_values
 
 ### External style sheet
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 ## Start Juptyer_dash app and link to style sheet
-#app = JupyterDash(__name__, external_stylesheets=external_stylesheets)
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app = JupyterDash(__name__, external_stylesheets=external_stylesheets)
+#app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 ## PP slider values
 S_MIN = min(df2['PP'])
@@ -262,48 +245,48 @@ def on_trace_click(clickData):
         return row.to_dict('records')
 
 ## Call back for updating facet
-@app.callback(
-    Output('facet', 'figure'),
-    Input('graph-with-slider', 'clickData'))
-def update_figure(clickData):
-    if clickData == None:
-        x = 1
-        line = df2.iloc[x,] 
-        line_lp = line[15]
-        line_ld = line[16]
-        line_temp = line[17]
-        newdf = df[(df['Temp'] == line_temp)&(df['Laser_Power'] == line_lp)&(df['Laser_Detuning'] == line_ld) ]
-    else:
-        temp = clickData['points'][0]['y']
-        lp = clickData['points'][0]['x']
-        ld = clickData['points'][0]['z']
-        ## Refine all values to get matching raw data (8000 points)
-        newdf = df[(df['Temp'] == temp)&(df['Laser_Power'] == lp)&(df['Laser_Detuning'] == ld) ]
-    fig = px.scatter(newdf, x="X  Field (nT)", y="Y  Field (nT)",
-                     color="Photodiode Voltage (V)", facet_col="Z  Field (nT)",  facet_col_wrap=10)
-    fig.update_layout(yaxis=dict(scaleanchor='x', constrain='domain')) #Make axis equal (squares)
-    fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest') #Change margins
-    fig.update_layout(font=dict(size=8)) # Change font size
-    fig.for_each_annotation(lambda a: a.update(text=a.text.replace("Z  Field (nT)=", "Bz ="))) # change title of each facet
-    fig['layout']['yaxis13']['title']['text']=''
-    fig['layout']['yaxis5']['title']['text']=''
-    fig['layout']['yaxis']['title']['text']=''
-    fig['layout']['yaxis17']['title']['text']=''
-    fig['layout']['xaxis']['title']['text']=''
-    fig['layout']['xaxis2']['title']['text']=''
-    fig['layout']['xaxis3']['title']['text']=''
-    fig['layout']['xaxis4']['title']['text']=''
-    fig['layout']['xaxis5']['title']['text']=''
-    fig['layout']['xaxis7']['title']['text']=''
-    fig['layout']['xaxis8']['title']['text']=''
-    fig['layout']['xaxis9']['title']['text']=''
-    fig['layout']['xaxis10']['title']['text']=''
-    fig.layout.coloraxis.colorbar.title = 'PD Voltage (V)'
-    fig.update_layout(height=180)
-    return fig
+#@app.callback(
+#    Output('facet', 'figure'),
+#    Input('graph-with-slider', 'clickData'))
+#def update_figure(clickData):
+#    if clickData == None:
+#        x = 1
+#        line = df2.iloc[x,] 
+#        line_lp = line[15]
+#        line_ld = line[16]
+#        line_temp = line[17]
+#        newdf = df[(df['Temp'] == line_temp)&(df['Laser_Power'] == line_lp)&(df['Laser_Detuning'] == line_ld) ]
+#    else:
+#        temp = clickData['points'][0]['y']
+#        lp = clickData['points'][0]['x']
+#        ld = clickData['points'][0]['z']
+#        ## Refine all values to get matching raw data (8000 points)
+#        newdf = df[(df['Temp'] == temp)&(df['Laser_Power'] == lp)&(df['Laser_Detuning'] == ld) ]
+#    fig = px.scatter(newdf, x="X  Field (nT)", y="Y  Field (nT)",
+#                     color="Photodiode Voltage (V)", facet_col="Z  Field (nT)",  facet_col_wrap=10)
+#    fig.update_layout(yaxis=dict(scaleanchor='x', constrain='domain')) #Make axis equal (squares)
+#    fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest') #Change margins
+#    fig.update_layout(font=dict(size=8)) # Change font size
+#    fig.for_each_annotation(lambda a: a.update(text=a.text.replace("Z  Field (nT)=", "Bz ="))) # change title of each facet
+#    fig['layout']['yaxis13']['title']['text']=''
+#    fig['layout']['yaxis5']['title']['text']=''
+#    fig['layout']['yaxis']['title']['text']=''
+#    fig['layout']['yaxis17']['title']['text']=''
+#    fig['layout']['xaxis']['title']['text']=''
+#    fig['layout']['xaxis2']['title']['text']=''
+#    fig['layout']['xaxis3']['title']['text']=''
+#    fig['layout']['xaxis4']['title']['text']=''
+#    fig['layout']['xaxis5']['title']['text']=''
+#    fig['layout']['xaxis7']['title']['text']=''
+#    fig['layout']['xaxis8']['title']['text']=''
+#    fig['layout']['xaxis9']['title']['text']=''
+#    fig['layout']['xaxis10']['title']['text']=''
+#    fig.layout.coloraxis.colorbar.title = 'PD Voltage (V)'
+#    fig.update_layout(height=180)
+#    return fig
 
     
 # Open app in-line with notebook
 if __name__ == '__main__':
-    #app.run_server(mode='inline')
-    app.run_server(debug=True)
+    app.run_server(mode='inline')
+    #app.run_server(debug=True)
