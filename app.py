@@ -14,21 +14,21 @@ ALL_data_fit_values = pd.read_csv('https://raw.githubusercontent.com/rach6230/Da
 ALL_data_fit_values["V/nT"] =  abs(ALL_data_fit_values['A'])/abs(ALL_data_fit_values['C'])
 
 # Import and combine all systematic data
-filenames=[]
-for i in range(1, 47):
-    value = str(i)
-    title = "https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Data/All_SYSTEMATIC_DATA_V1-"
-    csv = ".csv"
-    name = title + value + csv
-    filenames.append(name)
+#filenames=[]
+#for i in range(1, 47):
+#    value = str(i)
+#    title = "https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Data/All_SYSTEMATIC_DATA_V1-"
+#    csv = ".csv"
+#    name = title + value + csv
+#    filenames.append(name)
 
-df_list=[]
-for i in filenames:
-    df = pd.read_csv(i)
-    df_list.append(df)
+#df_list=[]
+#for i in filenames:
+#    df = pd.read_csv(i)
+#    df_list.append(df)
     
-ALL_data = pd.concat(df_list)
-
+#ALL_data = pd.concat(df_list)
+ALL_data= pd.read_csv("https://archive.org/download/all-systematic-data-v-1/All_SYSTEMATIC_DATA_V1.csv")
 ## Load data
 df = ALL_data
 df2 = ALL_data_fit_values
