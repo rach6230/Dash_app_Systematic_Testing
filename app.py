@@ -1,16 +1,33 @@
-from jupyter_dash import JupyterDash
+import dash
+#from jupyter_dash import JupyterDash
 import dash_core_components as dcc
 import dash_html_components as html
 import plotly.express as px
 import pandas as pd
 import dash_table
+from dash.dependencies import Input, Output
 
-# Import from txt file (created in Matlab)
-ALL_data_fit_values = pd.read_csv("C:/Users/rache/OneDrive/Desktop/Optimisation/Systematic_sample/Full_fit_Data.csv")
-ALL_data = pd.read_csv("C:/Users/rache/OneDrive/Desktop/Optimisation/Systematic_sample/All_SYSTEMATIC_DATA_V1.csv")
+# Import Fit Data
+ALL_data_fit_values = pd.read_csv('https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Full_fit_Data.csv')
 
 # Create col of A/C:
 ALL_data_fit_values["V/nT"] =  abs(ALL_data_fit_values['A'])/abs(ALL_data_fit_values['C'])
+
+# Import and combine all systematic data
+filenames=[]
+for i in range(1, 47):
+    value = str(i)
+    title = "https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Data/All_SYSTEMATIC_DATA_V1-"
+    csv = ".csv"
+    name = title + value + csv
+    filenames.append(name)
+
+df_list=[]
+for i in filenames:
+    df = pd.read_csv(i)
+    df_list.append(df)
+    
+ALL_data = pd.concat(df_list)
 
 ## Load data
 df = ALL_data
@@ -20,7 +37,8 @@ df2 = ALL_data_fit_values
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 ## Start Juptyer_dash app and link to style sheet
-app = JupyterDash(__name__, external_stylesheets=external_stylesheets)
+#app = JupyterDash(__name__, external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 ## PP slider values
 S_MIN = min(df2['PP'])
@@ -136,7 +154,7 @@ app.layout = html.Div(children=[
                                                html.P('Fit Values'),
                                                dash_table.DataTable(id='my-table',
                                                                     style_cell={'textAlign': 'left', 'font_size': '10px'},
-                                                                    columns=[{"name": i, "id": i} for i in row.columns[0:14]]),
+                                                                    columns=[{"name": i, "id": i} for i in df2.columns[0:14]]),
                                                                     #data=row.to_dict('records')),
                                                html.Br(), #new line
                                                html.P('Raw Data'),
@@ -241,7 +259,6 @@ def on_trace_click(clickData):
                       (df2['Laser_Power']== lp)&
                       (df2['Laser_Detuning']== ld)]
         row = filtered_df
-        #row = df2.iloc[x:x+1,]
         return row.to_dict('records')
 
 ## Call back for updating facet
@@ -288,4 +305,5 @@ def update_figure(clickData):
     
 # Open app in-line with notebook
 if __name__ == '__main__':
-    app.run_server(mode='inline')
+    #app.run_server(mode='inline')
+    app.run_server(debug=True)
