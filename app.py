@@ -18,7 +18,13 @@ tabtitle='SERF: Systematic Testing'
 myheading='Flying Dog Beers'
 label1='IBU'
 label2='ABV'
+
+#### Import Fit Data
 ALL_data_fit_values = pd.read_csv('https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Full_fit_Data.csv')
+# Create col of A/C:
+ALL_data_fit_values["V/nT"] =  abs(ALL_data_fit_values['A'])/abs(ALL_data_fit_values['C'])
+## Load data
+df2 = ALL_data_fit_values
 
 ########### Set up the chart
 bitterness = go.Bar(
