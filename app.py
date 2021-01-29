@@ -100,8 +100,35 @@ app.layout = html.Div(children=[
                                           df2['V/nT'].max(): {'label': 'Max', 'style': {'color': '#f50'}}
                                         }
                                        ),
-                        html.Br(), #new line
-                        html.P('Error:'),
+                          html.Br(), #new line
+                          html.P('Error:'),
+                          html.Div(id='PP_slider-drag-output', style={'margin-top': 20,'fontSize': 12}),
+                          dcc.Slider(id='PP-slider',
+                                     min=S_MIN,
+                                     max=S_MAX,
+                                     step=S_STEP,
+                                     value=S_MAX,
+                                     marks={S_MIN: {'label': '0 %', 'style': {'color': '#77b0b1'}},
+                                            S_MAX*0.25: {'label': '25 %'},
+                                            S_MAX*0.5: {'label': '50 %'},
+                                            S_MAX*0.75: {'label': '75 %'},
+                                            S_MAX: {'label': '100%', 'style': {'color': '#f50'}}
+                                           }
+                                    ),
+                          html.Div(id='MSE_slider-drag-output', style={'margin-top': 20,'fontSize': 12}),
+                          dcc.Slider(id='MSE-slider',
+                                     min=MSE_MIN,
+                                     max=MSE_MAX,
+                                     step=MSE_STEP,
+                                     value=MSE_MAX,
+                                     marks={
+                                         0: {'label': '0 °C', 'style': {'color': '#77b0b1'}},
+                                         MSE_MAX*0.25: {'label': '25 %'},
+                                         MSE_MAX*0.5: {'label': '50 %'},
+                                         MSE_MAX*0.75: {'label': '75 %'},
+                                         MSE_MAX: {'label': '100%', 'style': {'color': '#f50'}}
+                                     }
+                                    )
                       ]
                      ),  # Define the 1st column
              html.Div(className='nine columns div-for-charts',
@@ -168,14 +195,29 @@ def display_value(value):
   high = value[1]
   return 'V/nt = {} to {}'.format(low, high)
 
+## Call back for PP slider indicator
+@app.callback(Output('PP_slider-drag-output', 'children'),
+              [Input('PP-slider', 'value')])
+def display_value(value):
+    return 'PP Value = {}'.format(value)
+
+## Call back for MSE slider indicator
+@app.callback(Output('MSE_slider-drag-output', 'children'),
+              [Input('MSE-slider', 'value')])
+def display_value(value):
+    return 'MSE Value = {}'.format(value)
+
 ## Call back for updating the 3D graph
 @app.callback(Output('graph-with-slider', 'figure'),
               Input('temp-range-slider', 'value'),
               Input('LP-range-slider', 'value'),
               Input('vnt-range-slider', 'value'),
-              Input('LD-range-slider', 'value'))
-def update_figure(TEMP, LP, vnt, LD):
-  filtered_df = df2[(df2['Temp']<= TEMP[1])&(df2['Temp']>= TEMP[0])&
+              Input('LD-range-slider', 'value'),
+              Input('PP-slider', 'value'),
+              Input('MSE-slider', 'value'))
+def update_figure(TEMP, LP, vnt, LD, PP, MSE):
+  filtered_df = df2[(df2['PP']< PP)&(df2['MSE']< MSE)&
+                    (df2['Temp']<= TEMP[1])&(df2['Temp']>= TEMP[0])&
                     (df2['Laser_Power']<= LP[1])&(df2['Laser_Power']>= LP[0])&
                     (df2['V/nT']<= vnt[1])&(df2['V/nT']>= vnt[0])&
                     (df2['Laser_Detuning']<= LD[1])&(df2['Laser_Detuning']>= LD[0])]
