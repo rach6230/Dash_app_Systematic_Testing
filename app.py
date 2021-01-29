@@ -55,10 +55,6 @@ app.layout = html.Div(children=[
 ## Callback for selected data text
 @app.callback(
   Output('click-data', 'children'),
-  Input('graph-with-slider', 'clickData')
-)
-@app.callback(
-  Output('click-data', 'children'),
   Input('graph-with-slider', 'clickData'))
 def display_click_data(clickData):
   if clickData == None:
