@@ -13,6 +13,13 @@ ALL_data_fit_values = pd.read_csv('https://raw.githubusercontent.com/rach6230/Da
 ALL_data_fit_values["V/nT"] =  abs(ALL_data_fit_values['A'])/abs(ALL_data_fit_values['C'])
 ## Load data
 df2 = ALL_data_fit_values
+
+### External style sheet
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+
+## Start Juptyer_dash app and link to style sheet
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+
 ## PP slider values
 S_MIN = min(df2['PP'])
 S_MAX = max(df2['PP'])
