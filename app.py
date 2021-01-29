@@ -14,12 +14,10 @@ abv_values=[5.4, 7.1, 9.2, 4.3]
 color1='darkred'
 color2='orange'
 mytitle='Beer Comparison'
-tabtitle='beer!'
+tabtitle='SERF: Systematic Testing'
 myheading='Flying Dog Beers'
 label1='IBU'
 label2='ABV'
-githublink='https://github.com/austinlasseter/flying-dog-beers'
-sourceurl='https://www.flyingdog.com/beers/'
 ALL_data_fit_values = pd.read_csv('https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Full_fit_Data.csv')
 
 ########### Set up the chart
@@ -58,9 +56,7 @@ app.layout = html.Div(children=[
         id='flyingdog',
         figure=beer_fig
     ),
-    html.A('Code on Github', href=githublink),
     html.Br(),
-    html.A('Data Source', href=sourceurl),
     ]
 )
 
