@@ -206,14 +206,15 @@ def display_value(value):
               Input('vnt-range-slider', 'value'),
               Input('LD-range-slider', 'value'),
               Input('PP-slider', 'value'),
-              Input('MSE-slider', 'value'))
-def update_figure(TEMP, LP, vnt, LD, PP, MSE):
+              Input('MSE-slider', 'value'),
+              Input('value_dropdown', 'value'))
+def update_figure(TEMP, LP, vnt, LD, PP, MSE, col):
   filtered_df = df2[(df2['PP']< PP)&(df2['MSE']< MSE)&
                     (df2['Temp']<= TEMP[1])&(df2['Temp']>= TEMP[0])&
                     (df2['Laser_Power']<= LP[1])&(df2['Laser_Power']>= LP[0])&
                     (df2['V/nT']<= vnt[1])&(df2['V/nT']>= vnt[0])&
                     (df2['Laser_Detuning']<= LD[1])&(df2['Laser_Detuning']>= LD[0])]
-  fig = px.scatter_3d(filtered_df, y='Temp', z='Laser_Detuning', x='Laser_Power', color='V/nT')
+  fig = px.scatter_3d(filtered_df, y='Temp', z='Laser_Detuning', x='Laser_Power', color=col)
   fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest')
   fig.update_layout(transition_duration=500)
   fig.update_layout(height=300)
