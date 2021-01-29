@@ -68,6 +68,33 @@ app.layout = html.Div(children=[
                                  350: {'label': '350', 'style': {'color': '#f50'}}
                                 }
                         ),
+                        html.Div(id='LD_slider-drag-output', style={'margin-top': 20,'fontSize': 12}),
+                        dcc.RangeSlider(id='LD-range-slider',
+                                        min=-35,
+                                        max=(df2['Laser_Detuning'].max())+1,
+                                        step=1,
+                                        value=[df2['Laser_Detuning'].min(), 15],
+                                        marks={
+                                          -35: {'label': '-35', 'style': {'color': '#77b0b1'}},
+                                          -22.5: {'label': '-22.5'},
+                                          -10: {'label': '-10'},
+                                          2.5: {'label': '2.5'},
+                                          15: {'label': '15', 'style': {'color': '#f50'}}
+                                        }
+                                       ),
+                        html.Div(id='vnt_slider-drag-output', style={'margin-top': 20,'fontSize': 12}),
+                        dcc.RangeSlider(id='vnt-range-slider',
+                                        min=df2['V/nT'].min(),
+                                        max=df2['V/nT'].max(),
+                                        step=1,
+                                        value=[df2['V/nT'].min(), df2['V/nT'].max()],
+                                        marks={
+                                          df2['V/nT'].min(): {'label': 'Min', 'style': {'color': '#77b0b1'}},
+                                          df2['V/nT'].max(): {'label': 'Max', 'style': {'color': '#f50'}}
+                                        }
+                                       ),
+                        html.Br(), #new line
+                        html.P('Error:'),
                       ]
                      ),  # Define the 1st column
              html.Div(className='nine columns div-for-charts',
@@ -118,13 +145,33 @@ def display_value(value):
   high = value[1]
   return 'Laser Power = {} to {}μW'.format(low, high)
 
+## Call back for LD slider indicator
+@app.callback(Output('LD_slider-drag-output', 'children'),
+              [Input('LD-range-slider', 'value')])
+def display_value(value):
+  low = value[0]
+  high = value[1]
+  return 'Laser Detuning = {} to {}GHz'.format(low, high)
+
+## Call back for vnt slider indicator
+@app.callback(Output('vnt_slider-drag-output', 'children'),
+              [Input('vnt-range-slider', 'value')])
+def display_value(value):
+  low = value[0]
+  high = value[1]
+  return 'V/nt = {} to {}'.format(low, high)
+
 ## Call back for updating the 3D graph
 @app.callback(Output('graph-with-slider', 'figure'),
               Input('temp-range-slider', 'value'),
-              Input('LP-range-slider', 'value'))
-def update_figure(TEMP, LP):
+              Input('LP-range-slider', 'value'),
+              Input('vnt-range-slider', 'value'),
+              Input('LD-range-slider', 'value'))
+def update_figure(TEMP, LP, vnt, LD):
   filtered_df = df2[(df2['Temp']<= TEMP[1])&(df2['Temp']>= TEMP[0])&
-                    (df2['Laser_Power']<= LP[1])&(df2['Laser_Power']>= LP[0])]
+                    (df2['Laser_Power']<= LP[1])&(df2['Laser_Power']>= LP[0])&
+                    (df2['V/nT']<= vnt[1])&(df2['V/nT']>= vnt[0])&
+                    (df2['Laser_Detuning']<= LD[1])&(df2['Laser_Detuning']>= LD[0])]
   fig = px.scatter_3d(filtered_df, y='Temp', z='Laser_Detuning', x='Laser_Power', color='V/nT')
   fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest')
   fig.update_layout(transition_duration=500)
