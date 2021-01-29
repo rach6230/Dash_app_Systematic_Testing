@@ -131,6 +131,7 @@ app.layout = html.Div(children=[
                             id='value_dropdown',
                             options=[{"label": i, "value": i} for i in df2.columns[19:20]]+[{"label": i, "value": i} for i in df2.columns[0:7]],
                             value='V/nT',
+                            inputStyle={"margin-left": "20px"}, # add space between radio items
                             labelStyle={'display': 'inline-block'},
                             style={'fontSize': 12}
                         ),  
