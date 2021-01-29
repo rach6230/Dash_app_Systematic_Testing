@@ -26,6 +26,12 @@ MSE_MIN = min(df2['MSE'])
 MSE_MAX = max(df2['MSE'])
 MSE_STEP = (MSE_MIN+MSE_MAX)/1000
 
+## Colour values
+colors = {
+    'background': '#f2f2f2',
+    'text': '#7FDBFF'
+}
+
 ########### Initiate the app
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
@@ -38,6 +44,7 @@ app.layout = html.Div(children=[
   html.Div(className='row',  # Define the row elemen
            children=[
              html.Div(className='three columns div-for-charts',
+                      style={'backgroundColor': colors['background']},
                       children = [
                         html.H6('Filters'),
                         html.P('Parameter Range:'),
@@ -177,6 +184,8 @@ def update_figure(TEMP, LP, vnt, LD):
   fig.update_layout(transition_duration=500)
   fig.update_layout(height=300)
   return fig
+
+
 
 if __name__ == '__main__':
     app.run_server()
