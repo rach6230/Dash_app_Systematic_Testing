@@ -7,9 +7,7 @@ from dash.dependencies import Input, Output
 import plotly.express as px
 
 ########### Define your variables
-mytitle='Beer Comparison'
 tabtitle='SERF: Systematic Testing'
-myheading='Flying Dog Beers'
 
 #### Import Fit Data
 ALL_data_fit_values = pd.read_csv('https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Full_fit_Data.csv')
