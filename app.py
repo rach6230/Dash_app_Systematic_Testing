@@ -31,8 +31,8 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 server = app.server
 app.title=tabtitle
+
 ########### Set up the layout
-#Empty layout
 #Empty layout
 app.layout = html.Div(children=[
   html.Div(className='row',  # Define the row elemen
@@ -52,6 +52,20 @@ app.layout = html.Div(children=[
                                  80: {'label': '80 °C'},
                                  100: {'label': '100 °C'},
                                  120: {'label': '120°C', 'style': {'color': '#f50'}}
+                                }
+                        ),
+                        html.Div(id='LP_slider-drag-output', style={'margin-top': 20,'fontSize': 12}),
+                        dcc.RangeSlider(
+                          id='LP-range-slider',
+                          min=df2['Laser_Power'].min(),
+                          max=df2['Laser_Power'].max(),
+                          step=1,
+                          value=[df2['Laser_Power'].min(), df2['Laser_Power'].max()],
+                          marks={70: {'label': '70', 'style': {'color': '#77b0b1'}},
+                                 140: {'label': '140'},
+                                 210: {'label': '210'},
+                                 280: {'label': '280'},
+                                 350: {'label': '350', 'style': {'color': '#f50'}}
                                 }
                         ),
                       ]
@@ -96,11 +110,21 @@ def display_value(value):
   high = value[1]
   return 'Temperature = {} to {}°C'.format(low, high)
 
+## Call back for lp slider indicator
+@app.callback(Output('LP_slider-drag-output', 'children'),
+              [Input('LP-range-slider', 'value')])
+def display_value(value):
+  low = value[0]
+  high = value[1]
+  return 'Laser Power = {} to {}μW'.format(low, high)
+
 ## Call back for updating the 3D graph
 @app.callback(Output('graph-with-slider', 'figure'),
-              Input('temp-range-slider', 'value'))
-def update_figure(TEMP):
-  filtered_df = df2[(df2['Temp']<= TEMP[1])&(df2['Temp']>= TEMP[0])]
+              Input('temp-range-slider', 'value'),
+              Input('LP-range-slider', 'value'))
+def update_figure(TEMP, LP):
+  filtered_df = df2[(df2['Temp']<= TEMP[1])&(df2['Temp']>= TEMP[0])&
+                    (df2['Laser_Power']<= LP[1])&(df2['Laser_Power']>= LP[0])]
   fig = px.scatter_3d(filtered_df, y='Temp', z='Laser_Detuning', x='Laser_Power', color='V/nT')
   fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest')
   fig.update_layout(transition_duration=500)
