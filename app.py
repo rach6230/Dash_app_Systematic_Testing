@@ -155,7 +155,62 @@ def display_click_data(clickData):
     vnt = clickData['points'][0]['marker.color']
     A = 'Temperature ={}°C, Laser Power = {}μW, Laser Detuning = {}GHz, V/nT = {}'.format(temp, lp, ld, vnt)
   return A
-@@ -227,7 +230,22 @@
+## Call back for TEMP slider indicator
+@app.callback(Output('TEMP_slider-drag-output', 'children'),
+              [Input('temp-range-slider', 'value')]
+             )
+def display_value(value):
+  low = value[0]
+  high = value[1]
+  return 'Temperature = {} to {}°C'.format(low, high)
+## Call back for lp slider indicator
+@app.callback(Output('LP_slider-drag-output', 'children'),
+              [Input('LP-range-slider', 'value')])
+def display_value(value):
+  low = value[0]
+  high = value[1]
+  return 'Laser Power = {} to {}μW'.format(low, high)
+## Call back for LD slider indicator
+@app.callback(Output('LD_slider-drag-output', 'children'),
+              [Input('LD-range-slider', 'value')])
+def display_value(value):
+  low = value[0]
+  high = value[1]
+  return 'Laser Detuning = {} to {}GHz'.format(low, high)
+## Call back for vnt slider indicator
+@app.callback(Output('vnt_slider-drag-output', 'children'),
+              [Input('vnt-range-slider', 'value')])
+def display_value(value):
+  low = value[0]
+  high = value[1]
+  return 'V/nt = {} to {}'.format(low, high)
+## Call back for PP slider indicator
+@app.callback(Output('PP_slider-drag-output', 'children'),
+              [Input('PP-slider', 'value')])
+def display_value(value):
+    return 'PP Value = {}'.format(value)
+## Call back for MSE slider indicator
+@app.callback(Output('MSE_slider-drag-output', 'children'),
+              [Input('MSE-slider', 'value')])
+def display_value(value):
+    return 'MSE Value = {}'.format(value)
+## Call back for updating the 3D graph
+@app.callback(Output('graph-with-slider', 'figure'),
+              Input('temp-range-slider', 'value'),
+              Input('LP-range-slider', 'value'),
+              Input('vnt-range-slider', 'value'),
+              Input('LD-range-slider', 'value'),
+              Input('PP-slider', 'value'),
+              Input('MSE-slider', 'value'))
+def update_figure(TEMP, LP, vnt, LD, PP, MSE):
+  filtered_df = df2[(df2['PP']< PP)&(df2['MSE']< MSE)&
+                    (df2['Temp']<= TEMP[1])&(df2['Temp']>= TEMP[0])&
+                    (df2['Laser_Power']<= LP[1])&(df2['Laser_Power']>= LP[0])&
+                    (df2['V/nT']<= vnt[1])&(df2['V/nT']>= vnt[0])&
+                    (df2['Laser_Detuning']<= LD[1])&(df2['Laser_Detuning']>= LD[0])]
+  fig = px.scatter_3d(filtered_df, y='Temp', z='Laser_Detuning', x='Laser_Power', color='V/nT')
+  fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest')
+  fig.update_layout(transition_duration=500)
   fig.update_layout(height=300)
   return fig
 
