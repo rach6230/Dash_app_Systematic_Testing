@@ -127,6 +127,11 @@ app.layout = html.Div(children=[
              html.Div(className='nine columns div-for-charts',
                       children = [
                         html.H6('All Data'),
+                        dcc.Dropdown(
+                            id='value_dropdown',
+                            options=[{"label": i, "value": i} for i in df2.columns[19:20]]+[{"label": i, "value": i} for i in df2.columns[0:7]],
+                            value='V/nT'
+                        ),  
                         dcc.Graph(id='graph-with-slider',config={'displayModeBar': False}),
                         html.H6('Selected Data'),
                         html.Div(id='click-data', style={'fontSize': 12}),
