@@ -138,6 +138,9 @@ app.layout = html.Div(children=[
                         html.H6('Selected Data'),
                         html.Div(id='click-data', style={'fontSize': 12}),
                         html.P('Fit Values'),
+                        dash_table.DataTable(id='my-table',
+                                             style_cell={'textAlign': 'left', 'font_size': '10px'},
+                                             columns=[{"name": i, "id": i} for i in df2.columns[0:14]]),
                         html.Br(), #new lin
                       ]
                      )  # Define the 3rd column
@@ -227,7 +230,22 @@ def update_figure(TEMP, LP, vnt, LD, PP, MSE):
   fig.update_layout(height=300)
   return fig
 
-
+## Callback for table
+@app.callback(
+    Output("my-table", "data"),
+    Input('graph-with-slider', 'clickData'))
+def on_trace_click(clickData):
+    if clickData!= None:
+        temp = clickData['points'][0]['y']
+        lp = clickData['points'][0]['x']
+        ld = clickData['points'][0]['z']
+        vnt = clickData['points'][0]['marker.color']
+        x = clickData['points'][0]['pointNumber']
+        filtered_df = df2[(df2['Temp']== temp)&
+                      (df2['Laser_Power']== lp)&
+                      (df2['Laser_Detuning']== ld)]
+        row = filtered_df
+        return row.to_dict('records')
 
 if __name__ == '__main__':
     app.run_server()
