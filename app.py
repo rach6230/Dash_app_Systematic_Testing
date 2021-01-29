@@ -136,16 +136,17 @@ app.layout = html.Div(children=[
                             style={'fontSize': 12}
                         ),  
                         dcc.Graph(id='graph-with-slider',config={'displayModeBar': False}),
+                        html.H6('Selected Data'),
+                        html.Div(id='click-data', style={'fontSize': 12}),
+                        html.P('Fit Values'),
+                        dash_table.DataTable(id='my-table',
+                                             style_cell={'textAlign': 'left', 'font_size': '10px'},
+                                             columns=[{"name": i, "id": i} for i in df2.columns[0:14]]),
                       ]
                      ),  # Define the 3rd column
                html.Div(className='four columns div-for-charts',
                         children = [
                             html.H6('Selected Data'),
-                            html.Div(id='click-data', style={'fontSize': 12}),
-                            html.P('Fit Values'),
-                            dash_table.DataTable(id='my-table',
-                                                 style_cell={'textAlign': 'left', 'font_size': '10px'},
-                                                 columns=[{"name": i, "id": i} for i in df2.columns[0:14]]),
                             html.Br(), #new lin
                       ]
                      ),  # Define the 3rd column
