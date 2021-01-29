@@ -16,12 +16,23 @@ ALL_data_fit_values["V/nT"] =  abs(ALL_data_fit_values['A'])/abs(ALL_data_fit_va
 ## Load data
 df2 = ALL_data_fit_values
 
+## PP slider values
+S_MIN = min(df2['PP'])
+S_MAX = max(df2['PP'])
+S_STEP = (S_MIN+S_MAX)/1000
+
+## MSE slider values
+MSE_MIN = min(df2['MSE'])
+MSE_MAX = max(df2['MSE'])
+MSE_STEP = (MSE_MIN+MSE_MAX)/1000
+
 ########### Initiate the app
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 server = app.server
 app.title=tabtitle
 ########### Set up the layout
+#Empty layout
 #Empty layout
 app.layout = html.Div(children=[
   html.Div(className='row',  # Define the row elemen
@@ -59,6 +70,7 @@ app.layout = html.Div(children=[
           )
 ]
 )
+
 
 ## Callback for selected data text
 @app.callback(
