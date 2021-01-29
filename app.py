@@ -6,7 +6,8 @@ import plotly.express as px
 import pandas as pd
 import dash_table
 from dash.dependencies import Input, Output
-
+#Variables
+tabtitle='test'
 # Import Fit Data
 ALL_data_fit_values = pd.read_csv('https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Full_fit_Data.csv')
 
@@ -22,6 +23,8 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 ## Start Juptyer_dash app and link to style sheet
 #app = JupyterDash(__name__, external_stylesheets=external_stylesheets)
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+server = app.server
+app.title=tabtitle
 
 ## PP slider values
 S_MIN = min(df2['PP'])
