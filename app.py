@@ -35,7 +35,8 @@ app.layout = html.Div(children=[
                       children = [
                         html.H6('Filters'),
                         html.P('Parameter Range:'),
-                      ]),  # Define the 1st column
+                      ]
+                     ),  # Define the 1st column
              html.Div(className='nine columns div-for-charts',
                       children = [
                         html.H6('All Data'),
@@ -43,9 +44,11 @@ app.layout = html.Div(children=[
                         html.H6('Selected Data'),
                         html.Div(id='click-data', style={'fontSize': 12}),
                         html.P('Fit Values'),
-                        html.Br(), #new line
-                      ])  # Define the 3rd column
-           ])
+                        html.Br(), #new lin
+                      ]
+                     )  # Define the 3rd column
+           ]
+          )
 ])
 
 ## Callback for selected data text
@@ -55,12 +58,12 @@ app.layout = html.Div(children=[
 def display_click_data(clickData):
   if clickData == None:
     A = "Select data point"
-else:
-  temp = clickData['points'][0]['y']
-  lp = clickData['points'][0]['x']
-  ld = clickData['points'][0]['z']
-  vnt = clickData['points'][0]['marker.color']
-  A = 'Temperature ={}°C, Laser Power = {}μW, Laser Detuning = {}GHz, V/nT = {}'.format(temp, lp, ld, vnt)
+  else:
+    temp = clickData['points'][0]['y']
+    lp = clickData['points'][0]['x']
+    ld = clickData['points'][0]['z']
+    vnt = clickData['points'][0]['marker.color']
+    A = 'Temperature ={}°C, Laser Power = {}μW, Laser Detuning = {}GHz, V/nT = {}'.format(temp, lp, ld, vnt)
 return A
 
 if __name__ == '__main__':
