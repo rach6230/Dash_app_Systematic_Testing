@@ -1,44 +1,3 @@
-import dash
-import dash_core_components as dcc
-import dash_html_components as html
-import pandas as pd
-import dash_table
-from dash.dependencies import Input, Output
-import plotly.express as px
-
-########### Define your variables
-tabtitle='SERF: Systematic Testing'
-
-#### Import Fit Data
-ALL_data_fit_values = pd.read_csv('https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Full_fit_Data.csv')
-# Create col of A/C:
-ALL_data_fit_values["V/nT"] =  abs(ALL_data_fit_values['A'])/abs(ALL_data_fit_values['C'])
-## Load data
-df2 = ALL_data_fit_values
-
-## PP slider values
-S_MIN = min(df2['PP'])
-S_MAX = max(df2['PP'])
-S_STEP = (S_MIN+S_MAX)/1000
-
-## MSE slider values
-MSE_MIN = min(df2['MSE'])
-MSE_MAX = max(df2['MSE'])
-MSE_STEP = (MSE_MIN+MSE_MAX)/1000
-
-## Colour values
-colors = {
-    'background': '#f2f2f2',
-    'text': '#7FDBFF'
-}
-
-########### Initiate the app
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-server = app.server
-app.title=tabtitle
-
-########### Set up the layout
 #Empty layout
 app.layout = html.Div(children=[
   html.Div(className='row',  # Define the row elemen
@@ -134,6 +93,11 @@ app.layout = html.Div(children=[
              html.Div(className='nine columns div-for-charts',
                       children = [
                         html.H6('All Data'),
+                        dcc.Dropdown(
+                            id='value_dropdown',
+                            options=[{"label": i, "value": i} for i in df2.columns[19:20]]+[{"label": i, "value": i} for i in df2.columns[0:7]],
+                            value='V/nT'
+                        ),  
                         dcc.Graph(id='graph-with-slider',config={'displayModeBar': False}),
                         html.H6('Selected Data'),
                         html.Div(id='click-data', style={'fontSize': 12}),
@@ -217,14 +181,15 @@ def display_value(value):
               Input('vnt-range-slider', 'value'),
               Input('LD-range-slider', 'value'),
               Input('PP-slider', 'value'),
-              Input('MSE-slider', 'value'))
-def update_figure(TEMP, LP, vnt, LD, PP, MSE):
+              Input('MSE-slider', 'value'),
+             Input('value_dropdown', 'value'))
+def update_figure(TEMP, LP, vnt, LD, PP, MSE, col):
   filtered_df = df2[(df2['PP']< PP)&(df2['MSE']< MSE)&
                     (df2['Temp']<= TEMP[1])&(df2['Temp']>= TEMP[0])&
                     (df2['Laser_Power']<= LP[1])&(df2['Laser_Power']>= LP[0])&
                     (df2['V/nT']<= vnt[1])&(df2['V/nT']>= vnt[0])&
                     (df2['Laser_Detuning']<= LD[1])&(df2['Laser_Detuning']>= LD[0])]
-  fig = px.scatter_3d(filtered_df, y='Temp', z='Laser_Detuning', x='Laser_Power', color='V/nT')
+  fig = px.scatter_3d(filtered_df, y='Temp', z='Laser_Detuning', x='Laser_Power', color=col)
   fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest')
   fig.update_layout(transition_duration=500)
   fig.update_layout(height=300)
@@ -246,6 +211,3 @@ def on_trace_click(clickData):
                       (df2['Laser_Detuning']== ld)]
         row = filtered_df
         return row.to_dict('records')
-
-if __name__ == '__main__':
-    app.run_server()
