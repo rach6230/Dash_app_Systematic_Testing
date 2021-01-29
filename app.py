@@ -5,6 +5,7 @@ import pandas as pd
 import dash_table
 from dash.dependencies import Input, Output
 import plotly.express as px
+
 ########### Define your variables
 tabtitle='SERF: Systematic Testing'
 #### Import Fit Data
@@ -13,23 +14,6 @@ ALL_data_fit_values = pd.read_csv('https://raw.githubusercontent.com/rach6230/Da
 ALL_data_fit_values["V/nT"] =  abs(ALL_data_fit_values['A'])/abs(ALL_data_fit_values['C'])
 ## Load data
 df2 = ALL_data_fit_values
-
-# Import and combine all systematic data
-filenames=[]
-for i in range(1, 47):
-    value = str(i)
-    title = "https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Data/All_SYSTEMATIC_DATA_V1-"
-    csv = ".csv"
-    name = title + value + csv
-    filenames.append(name)
-
-df_list=[]
-for i in filenames:
-    print(i)
-    df = pd.read_csv(i)
-    df_list.append(df)
-    
-ALL_data = pd.concat(df_list)
 
 ## PP slider values
 S_MIN = min(df2['PP'])
