@@ -130,7 +130,7 @@ app.layout = html.Div(children=[
                         dcc.RadioItems(
                             id='value_dropdown',
                             options=[{"label": i, "value": i} for i in df2.columns[19:20]]+[{"label": i, "value": i} for i in df2.columns[0:7]],
-                            value='V/nT'
+                            value='V/nT',
                             labelStyle={'display': 'inline-block'},
                             style={'fontSize': 12}
                         ),  
