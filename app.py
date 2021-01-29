@@ -19,6 +19,8 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 ## Start Juptyer_dash app and link to style sheet
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+server = app.server
+app.title=tabtitle
 
 ## PP slider values
 S_MIN = min(df2['PP'])
