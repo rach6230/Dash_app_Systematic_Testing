@@ -42,29 +42,15 @@ app.layout = html.Div(children=[
                         html.H6('All Data'),
                         dcc.Graph(id='graph-with-slider',config={'displayModeBar': False}, figure = fig),
                         html.H6('Selected Data'),
-                        html.Div(id='click-data', style={'fontSize': 12}),
                         html.P('Fit Values'),
                         html.Br(), #new lin
                       ]
                      )  # Define the 3rd column
            ]
           )
-])
+]
+)
 
-## Callback for selected data text
-@app.callback(
-  Output('click-data', 'children'),
-  Input('graph-with-slider', 'clickData'))
-def display_click_data(clickData):
-  if clickData == None:
-    A = "Select data point"
-  else:
-    temp = clickData['points'][0]['y']
-    lp = clickData['points'][0]['x']
-    ld = clickData['points'][0]['z']
-    vnt = clickData['points'][0]['marker.color']
-    A = 'Temperature ={}°C, Laser Power = {}μW, Laser Detuning = {}GHz, V/nT = {}'.format(temp, lp, ld, vnt)
-  return A
 
 if __name__ == '__main__':
     app.run_server()
