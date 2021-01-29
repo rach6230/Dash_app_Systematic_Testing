@@ -24,7 +24,9 @@ ALL_data_fit_values = pd.read_csv('https://raw.githubusercontent.com/rach6230/Da
 ALL_data_fit_values["V/nT"] =  abs(ALL_data_fit_values['A'])/abs(ALL_data_fit_values['C'])
 ## Load data
 df2 = ALL_data_fit_values
-
+######
+fig = px.scatter_3d(df2, x='Temp', y='Laser_Detuning', z='Laser_Power',
+                   color='V/nT')
 ########### Set up the chart
 bitterness = go.Bar(
     x=beers,
@@ -54,7 +56,7 @@ app.layout = html.Div(children=[
     html.H1(myheading),
     dcc.Graph(
         id='flyingdog',
-        figure=beer_fig
+        figure=fig
     ),
     html.Br(),
     ]
