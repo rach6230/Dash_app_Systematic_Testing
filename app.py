@@ -5,6 +5,7 @@ import plotly.graph_objs as go
 import pandas as pd
 import dash_table
 from dash.dependencies import Input, Output
+import plotly.express as px
 
 ########### Define your variables
 beers=['Chesapeake Stout', 'Snake Dog IPA', 'Imperial Porter', 'Double Dog IPA']
