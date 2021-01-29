@@ -15,9 +15,6 @@ ALL_data_fit_values = pd.read_csv('https://raw.githubusercontent.com/rach6230/Da
 ALL_data_fit_values["V/nT"] =  abs(ALL_data_fit_values['A'])/abs(ALL_data_fit_values['C'])
 ## Load data
 df2 = ALL_data_fit_values
-######
-fig = px.scatter_3d(df2, x='Temp', y='Laser_Detuning', z='Laser_Power',
-                   color='V/nT')
 
 ########### Initiate the app
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -33,12 +30,25 @@ app.layout = html.Div(children=[
                       children = [
                         html.H6('Filters'),
                         html.P('Parameter Range:'),
+                        html.Div(id='TEMP_slider-drag-output', style={'margin-top': 20,'fontSize': 12}),
+                        dcc.RangeSlider(
+                          id='temp-range-slider',
+                          min=df2['Temp'].min(),
+                          max=df2['Temp'].max(),
+                          step=1,
+                          value=[df2['Temp'].min(), df2['Temp'].max()],
+                          marks={60: {'label': '60 °C', 'style': {'color': '#77b0b1'}},
+                                 80: {'label': '80 °C'},
+                                 100: {'label': '100 °C'},
+                                 120: {'label': '120°C', 'style': {'color': '#f50'}}
+                                }
+                        ),
                       ]
                      ),  # Define the 1st column
              html.Div(className='nine columns div-for-charts',
                       children = [
                         html.H6('All Data'),
-                        dcc.Graph(id='graph-with-slider',config={'displayModeBar': False}, figure = fig),
+                        dcc.Graph(id='graph-with-slider',config={'displayModeBar': False}),
                         html.H6('Selected Data'),
                         html.Div(id='click-data', style={'fontSize': 12}),
                         html.P('Fit Values'),
@@ -64,6 +74,26 @@ def display_click_data(clickData):
     vnt = clickData['points'][0]['marker.color']
     A = 'Temperature ={}°C, Laser Power = {}μW, Laser Detuning = {}GHz, V/nT = {}'.format(temp, lp, ld, vnt)
   return A
+
+## Call back for TEMP slider indicator
+@app.callback(Output('TEMP_slider-drag-output', 'children'),
+              [Input('temp-range-slider', 'value')]
+             )
+def display_value(value):
+  low = value[0]
+  high = value[1]
+  return 'Temperature = {} to {}°C'.format(low, high)
+
+## Call back for updating the 3D graph
+@app.callback(Output('graph-with-slider', 'figure'),
+              Input('temp-range-slider', 'value'))
+def update_figure(TEMP):
+  filtered_df = df2[(df2['Temp']<= TEMP[1])&(df2['Temp']>= TEMP[0])]
+  fig = px.scatter_3d(filtered_df, y='Temp', z='Laser_Detuning', x='Laser_Power', color='V/nT')
+  fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest')
+  fig.update_layout(transition_duration=500)
+  fig.update_layout(height=300)
+  return fig
 
 if __name__ == '__main__':
     app.run_server()
