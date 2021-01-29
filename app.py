@@ -1,17 +1,17 @@
 import dash
-#from jupyter_dash import JupyterDash
+##from jupyter_dash import JupyterDash
 import dash_core_components as dcc
 import dash_html_components as html
 import plotly.express as px
 import pandas as pd
 import dash_table
 from dash.dependencies import Input, Output
-#Variables
+##Variables
 tabtitle='test'
-# Import Fit Data
+## Import Fit Data
 ALL_data_fit_values = pd.read_csv('https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Full_fit_Data.csv')
 
-# Create col of A/C:
+## Create col of A/C:
 ALL_data_fit_values["V/nT"] =  abs(ALL_data_fit_values['A'])/abs(ALL_data_fit_values['C'])
 
 ## Load data
