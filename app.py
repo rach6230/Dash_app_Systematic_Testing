@@ -276,18 +276,19 @@ def update_figure(clickData):
     df =df.iloc[1:]
     newdf = df.apply(pd.to_numeric)
     fig = px.scatter(newdf, x="X  Field (nT)", y="Y  Field (nT)",
-                     color="Photodiode Voltage (V)", facet_col="Z  Field (nT)",  facet_col_wrap=4)
+                     color="Photodiode Voltage (V)", facet_col="Z  Field (nT)",  facet_col_wrap=5)
     fig.update_layout(yaxis=dict(scaleanchor='x', constrain='domain')) #Make axis equal (squares)
     fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest') #Change margins
     fig.update_layout(font=dict(size=8)) # Change font size
     fig.for_each_annotation(lambda a: a.update(text=a.text.replace("Z  Field (nT)=", "Bz ="))) # change title of each facet
-    fig['layout']['yaxis13']['title']['text']=''
-    fig['layout']['yaxis5']['title']['text']=''
+    fig['layout']['yaxis6']['title']['text']=''
     fig['layout']['yaxis']['title']['text']=''
-    fig['layout']['yaxis17']['title']['text']=''
+    fig['layout']['yaxis16']['title']['text']=''
+    fig['layout']['xaxis']['title']['text']=''
     fig['layout']['xaxis']['title']['text']=''
     fig['layout']['xaxis2']['title']['text']=''
     fig['layout']['xaxis4']['title']['text']=''
+    fig['layout']['xaxis5']['title']['text']=''
     fig.update_layout(coloraxis_showscale=False)
     ##fig.layout.coloraxis.colorbar.title = 'PD Voltage (V)'
     ##fig.update_layout(height=180)
