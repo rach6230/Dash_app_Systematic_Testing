@@ -291,7 +291,7 @@ def update_figure(clickData):
     fig['layout']['xaxis5']['title']['text']=''
     fig.update_layout(coloraxis_showscale=False)
     ##fig.layout.coloraxis.colorbar.title = 'PD Voltage (V)'
-    ##fig.update_layout(height=180)
+    fig.update_layout(height=400)
     return fig
 
 if __name__ == '__main__':
