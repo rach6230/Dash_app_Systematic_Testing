@@ -152,6 +152,7 @@ app.layout = html.Div(children=[
                html.Div(className='four columns div-for-charts',
                         children = [
                             html.H6('Selected Data'),
+                            dcc.Graph(id='facet',config={'displayModeBar': False}),
                             html.Br(), #new lin
                       ]
                      ),  # Define the 3rd column
@@ -250,6 +251,47 @@ def on_trace_click(clickData):
                       (df2['Laser_Detuning']== ld)]
         row = filtered_df
         return row.to_dict('records')
+
+## Call back for updating facet
+@app.callback(
+    Output('facet', 'figure'),
+    Input('graph-with-slider', 'clickData'))
+def update_figure(clickData):
+    if clickData == None:
+        x =35
+        line = df2.iloc[x,] 
+        lp = line[15]
+        ld = line[16]
+        temp = line[17]
+    else:
+        temp = clickData['points'][0]['y']
+        lp = clickData['points'][0]['x']
+        ld = clickData['points'][0]['z']
+    filtered_df = Github_urls[(Github_urls['Temp']== temp)]
+    filtered_df2 = filtered_df[(filtered_df['Laser_power']== lp)]
+    filtered_df3 = filtered_df2[(filtered_df2['Laser_Detuning']== ld)]
+    data_url = filtered_df3.iloc[0,0]
+    df = pd.read_table(data_url)
+    df.columns = df.iloc[0]
+    df =df.iloc[1:]
+    newdf = df.apply(pd.to_numeric)
+    fig = px.scatter(newdf, x="X  Field (nT)", y="Y  Field (nT)",
+                     color="Photodiode Voltage (V)", facet_col="Z  Field (nT)",  facet_col_wrap=4)
+    fig.update_layout(yaxis=dict(scaleanchor='x', constrain='domain')) #Make axis equal (squares)
+    fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest') #Change margins
+    fig.update_layout(font=dict(size=8)) # Change font size
+    fig.for_each_annotation(lambda a: a.update(text=a.text.replace("Z  Field (nT)=", "Bz ="))) # change title of each facet
+    fig['layout']['yaxis13']['title']['text']=''
+    fig['layout']['yaxis5']['title']['text']=''
+    fig['layout']['yaxis']['title']['text']=''
+    fig['layout']['yaxis17']['title']['text']=''
+    fig['layout']['xaxis']['title']['text']=''
+    fig['layout']['xaxis2']['title']['text']=''
+    fig['layout']['xaxis4']['title']['text']=''
+    fig.update_layout(coloraxis_showscale=False)
+    ##fig.layout.coloraxis.colorbar.title = 'PD Voltage (V)'
+    ##fig.update_layout(height=180)
+    return fig
 
 if __name__ == '__main__':
     app.run_server()
