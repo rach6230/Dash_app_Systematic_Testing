@@ -15,6 +15,9 @@ ALL_data_fit_values["V/nT"] =  abs(ALL_data_fit_values['A'])/abs(ALL_data_fit_va
 ## Load data
 df2 = ALL_data_fit_values
 
+## File path data for each raw data file
+Github_urls = pd.read_csv("https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Data_pt2/Github_urls_sorted.csv")
+
 ## PP slider values
 S_MIN = min(df2['PP'])
 S_MAX = max(df2['PP'])
