@@ -14,6 +14,8 @@ ALL_data_fit_values = pd.read_csv('https://raw.githubusercontent.com/rach6230/Da
 ALL_data_fit_values["V/nT"] =  abs(ALL_data_fit_values['A'])/abs(ALL_data_fit_values['C'])
 ## Load data
 df2 = ALL_data_fit_values
+# Inital data to show (selected point)
+x = 1406
 
 ## File path data for each raw data file
 Github_urls = pd.read_csv("https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Data_pt2/Github_urls_sorted.csv")
@@ -166,7 +168,12 @@ app.layout = html.Div(children=[
   Input('graph-with-slider', 'clickData'))
 def display_click_data(clickData):
   if clickData == None:
-    A = "Select data point"
+    line = df2.iloc[x,] 
+    lp = line[15]
+    ld = line[16]
+    temp = line[17]
+    vnt = line[19]
+    A = 'Temperature ={}°C, Laser Power = {}μW, Laser Detuning = {}GHz, V/nT = {}'.format(temp, lp, ld, vnt)"
   else:
     temp = clickData['points'][0]['y']
     lp = clickData['points'][0]['x']
@@ -258,7 +265,6 @@ def on_trace_click(clickData):
     Input('graph-with-slider', 'clickData'))
 def update_figure(clickData):
     if clickData == None:
-        x =35
         line = df2.iloc[x,] 
         lp = line[15]
         ld = line[16]
