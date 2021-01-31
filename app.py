@@ -173,7 +173,7 @@ def display_click_data(clickData):
     ld = line[16]
     temp = line[17]
     vnt = line[19]
-    A = 'Temperature ={}°C, Laser Power = {}μW, Laser Detuning = {}GHz, V/nT = {}'.format(temp, lp, ld, vnt)"
+    A = 'Temperature ={}°C, Laser Power = {}μW, Laser Detuning = {}GHz, V/nT = {}'.format(temp, lp, ld, vnt)
   else:
     temp = clickData['points'][0]['y']
     lp = clickData['points'][0]['x']
