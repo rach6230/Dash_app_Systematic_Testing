@@ -247,11 +247,21 @@ def update_figure(TEMP, LP, vnt, LD, PP, MSE, col):
     Output("my-table", "data"),
     Input('graph-with-slider', 'clickData'))
 def on_trace_click(clickData):
-    if clickData!= None:
+    if clickData== None:
+        x = 1406
+        line = df2.iloc[x,] 
+        lp = line[15]
+        ld = line[16]
+        temp = line[17]
+        filtered_df = df2[(df2['Temp']== temp)&
+                          (df2['Laser_Power']== lp)&
+                          (df2['Laser_Detuning']== ld)]
+        row = filtered_df
+        return row.to_dict('records')
+    else:
         temp = clickData['points'][0]['y']
         lp = clickData['points'][0]['x']
         ld = clickData['points'][0]['z']
-        vnt = clickData['points'][0]['marker.color']
         x = clickData['points'][0]['pointNumber']
         filtered_df = df2[(df2['Temp']== temp)&
                       (df2['Laser_Power']== lp)&
