@@ -143,6 +143,7 @@ app.layout = html.Div(children=[
                             style={'fontSize': 12}
                         ),  
                         dcc.Graph(id='graph-with-slider',config={'displayModeBar': False}),
+                        html.Br(), #new line
                         html.H6('Single Parameter Space Point Data'),
                         html.Div(id='click-data', style={'fontSize': 12}),
                         html.P('Fit Values'),
@@ -158,7 +159,8 @@ app.layout = html.Div(children=[
                      ),  # Define the 3rd column
                html.Div(className='four columns div-for-charts',
                         children = [
-                            html.H6('3-Axis data for single parameter space point'),
+                            html.H6('Raw 3-Axis Data'),
+                            html.P('For single parameter space point Single Parameter Space Point Data', style={'fontSize': 12}),
                             dcc.Graph(id='facet',config={'displayModeBar': False}),
                             html.H6('Hanle'),
                             html.Div(id='click-data-2', style={'fontSize': 12}),
@@ -248,8 +250,8 @@ def update_figure(TEMP, LP, vnt, LD, PP, MSE, col):
                     (df2['Laser_Detuning']<= LD[1])&(df2['Laser_Detuning']>= LD[0])]
   fig = px.scatter_3d(filtered_df, y='Temp', z='Laser_Detuning', x='Laser_Power', color=col)
   fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest')
-  fig.update_layout(transition_duration=500)
-  fig.update_layout(height=300)
+  ##fig.update_layout(transition_duration=500)
+  fig.update_layout(height=400)
   return fig
 
 
@@ -331,7 +333,7 @@ def update_figure(clickData):
     newdf = df.apply(pd.to_numeric)
     newdf["Z  Field (nT)"] = newdf["Z  Field (nT)"].round(2)
     fig = px.scatter(newdf, x="X  Field (nT)", y="Y  Field (nT)",
-                     color="Photodiode Voltage (V)", facet_col="Z  Field (nT)",  facet_col_wrap=4)
+                     color="Photodiode Voltage (V)", facet_col="Z  Field (nT)",  facet_col_wrap=4, color_continuous_scale='aggrnyl')
     fig.update_layout(yaxis=dict(scaleanchor='x', constrain='domain')) #Make axis equal (squares)
     fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest') #Change margins
     fig.update_layout(font=dict(size=8)) # Change font size
@@ -345,8 +347,8 @@ def update_figure(clickData):
     fig['layout']['xaxis4']['title']['text']=''
     fig['layout']['xaxis5']['title']['text']=''
     ##fig.update_layout(coloraxis_showscale=False)
-    ##fig.layout.coloraxis.colorbar.title = 'PD Voltage (V)'
-    fig.update_layout(height=400)
+    fig.layout.coloraxis.colorbar.title = 'PD (V)'
+    fig.update_layout(height=500)
     return fig
 
 ## Callback for selected data text hanle
