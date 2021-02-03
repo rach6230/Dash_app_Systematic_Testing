@@ -158,9 +158,9 @@ app.layout = html.Div(children=[
                             html.H6('Hanle'),
                             html.Div(id='click-data-2', style={'fontSize': 12}),
                             html.P('Transverse'),
-                            dcc.Graph(id='click-data-3',config={'displayModeBar': False}),
-                            html.P('Longitudinal'),
                             dcc.Graph(id='click-data-4',config={'displayModeBar': False}),
+                            html.P('Longitudinal'),
+                            dcc.Graph(id='click-data-3',config={'displayModeBar': False}),                           
                             html.Br(), #new lin
                       ]
                      ),  # Define the 3rd column
