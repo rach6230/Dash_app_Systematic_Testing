@@ -160,7 +160,7 @@ app.layout = html.Div(children=[
                html.Div(className='four columns div-for-charts',
                         children = [
                             html.H6('3-Axis Raw Data'),
-                            html.P('For single parameter space point Single Parameter Space Point Data', style={'fontSize': 12}),
+                            html.P('For Single Parameter Space Point', style={'fontSize': 12}),
                             dcc.Graph(id='facet',config={'displayModeBar': False}),
                             html.H6('Hanle'),
                             html.Div(id='click-data-2', style={'fontSize': 12}),
