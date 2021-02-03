@@ -297,8 +297,9 @@ def update_figure(clickData):
     df.columns = df.iloc[0]
     df =df.iloc[1:]
     newdf = df.apply(pd.to_numeric)
+    newdf["Z  Field (nT)"] = newdf["Z  Field (nT)"].round(2)
     fig = px.scatter(newdf, x="X  Field (nT)", y="Y  Field (nT)",
-                     color="Photodiode Voltage (V)", facet_col="Z  Field (nT)",  facet_col_wrap=5)
+                     color="Photodiode Voltage (V)", facet_col="Z  Field (nT)",  facet_col_wrap=4)
     fig.update_layout(yaxis=dict(scaleanchor='x', constrain='domain')) #Make axis equal (squares)
     fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest') #Change margins
     fig.update_layout(font=dict(size=8)) # Change font size
