@@ -347,7 +347,7 @@ def update_figure(clickData):
     fig['layout']['xaxis4']['title']['text']=''
     ##fig.update_layout(coloraxis_showscale=False)
     fig.layout.coloraxis.colorbar.title = 'PD (V)'
-    fig.update_layout(height=350)
+    fig.update_layout(height=450)
     return fig
 
 ## Callback for selected data text hanle
