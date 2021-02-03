@@ -143,17 +143,22 @@ app.layout = html.Div(children=[
                             style={'fontSize': 12}
                         ),  
                         dcc.Graph(id='graph-with-slider',config={'displayModeBar': False}),
-                        html.H6('Selected Data'),
+                        html.H6('Single Parameter Space Point Data'),
                         html.Div(id='click-data', style={'fontSize': 12}),
                         html.P('Fit Values'),
                         dash_table.DataTable(id='my-table',
                                              style_cell={'textAlign': 'left', 'font_size': '10px'},
                                              columns=[{"name": i, "id": i} for i in df2.columns[0:7]]),
+                        html.Br(), #new line
+                        html.P('Error Values'),  
+                        dash_table.DataTable(id='my-table2',
+                                             style_cell={'textAlign': 'left', 'font_size': '10px'},
+                                             columns=[{"name": i, "id": i} for i in df2.columns[7:14]]),  
                       ]
                      ),  # Define the 3rd column
                html.Div(className='four columns div-for-charts',
                         children = [
-                            html.H6('Selected Data'),
+                            html.H6('3-Axis data for single parameter space point'),
                             dcc.Graph(id='facet',config={'displayModeBar': False}),
                             html.H6('Hanle'),
                             html.Div(id='click-data-2', style={'fontSize': 12}),
@@ -274,7 +279,34 @@ def on_trace_click(clickData):
                       (df2['Laser_Detuning']== ld)]
         row = filtered_df
         return row.to_dict('records')
-
+    
+## Callback for error table
+@app.callback(
+    Output("my-table2", "data"),
+    Input('graph-with-slider', 'clickData'))
+def on_trace_click(clickData):
+    if clickData== None:
+        x = 1406
+        line = df2.iloc[x,] 
+        lp = line[15]
+        ld = line[16]
+        temp = line[17]
+        filtered_df = df2[(df2['Temp']== temp)&
+                          (df2['Laser_Power']== lp)&
+                          (df2['Laser_Detuning']== ld)]
+        row = filtered_df
+        return row.to_dict('records')
+    else:
+        temp = clickData['points'][0]['y']
+        lp = clickData['points'][0]['x']
+        ld = clickData['points'][0]['z']
+        x = clickData['points'][0]['pointNumber']
+        filtered_df = df2[(df2['Temp']== temp)&
+                      (df2['Laser_Power']== lp)&
+                      (df2['Laser_Detuning']== ld)]
+        row = filtered_df
+        return row.to_dict('records')
+    
 ## Call back for updating facet
 @app.callback(
     Output('facet', 'figure'),
