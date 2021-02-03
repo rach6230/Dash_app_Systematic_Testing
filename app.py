@@ -148,7 +148,7 @@ app.layout = html.Div(children=[
                         html.P('Fit Values'),
                         dash_table.DataTable(id='my-table',
                                              style_cell={'textAlign': 'left', 'font_size': '10px'},
-                                             columns=[{"name": i, "id": i} for i in df2.columns[0:14]]),
+                                             columns=[{"name": i, "id": i} for i in df2.columns[0:7]]),
                       ]
                      ),  # Define the 3rd column
                html.Div(className='four columns div-for-charts',
@@ -156,7 +156,7 @@ app.layout = html.Div(children=[
                             html.H6('Selected Data'),
                             dcc.Graph(id='facet',config={'displayModeBar': False}),
                             html.H6('Hanle'),
-                            html.Div(id='click-data-2', style={'fontSize': 16}),
+                            html.Div(id='click-data-2', style={'fontSize': 12}),
                             html.P('Transverse'),
                             dcc.Graph(id='click-data-3',config={'displayModeBar': False}),
                             html.P('Longitudinal'),
@@ -311,7 +311,7 @@ def update_figure(clickData):
     fig['layout']['xaxis2']['title']['text']=''
     fig['layout']['xaxis4']['title']['text']=''
     fig['layout']['xaxis5']['title']['text']=''
-    fig.update_layout(coloraxis_showscale=False)
+    ##fig.update_layout(coloraxis_showscale=False)
     ##fig.layout.coloraxis.colorbar.title = 'PD Voltage (V)'
     fig.update_layout(height=400)
     return fig
