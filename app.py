@@ -155,6 +155,12 @@ app.layout = html.Div(children=[
                         children = [
                             html.H6('Selected Data'),
                             dcc.Graph(id='facet',config={'displayModeBar': False}),
+                            html.H6('Hanle'),
+                            html.Div(id='click-data-2', style={'fontSize': 16}),
+                            html.P('Transverse'),
+                            dcc.Graph(id='click-data-3',config={'displayModeBar': False}),
+                            html.P('Longitudinal'),
+                            dcc.Graph(id='click-data-4',config={'displayModeBar': False}),
                             html.Br(), #new lin
                       ]
                      ),  # Define the 3rd column
@@ -308,6 +314,156 @@ def update_figure(clickData):
     fig.update_layout(coloraxis_showscale=False)
     ##fig.layout.coloraxis.colorbar.title = 'PD Voltage (V)'
     fig.update_layout(height=400)
+    return fig
+
+## Callback for selected data text hanle
+@app.callback(
+  Output('click-data-2', 'children'),
+  Input('facet', 'clickData'),
+  Input('graph-with-slider', 'clickData'))
+def display_click_data(clickData2, clickData):
+    if clickData == None:
+        x = 1406
+        line = df2.iloc[x,]
+        lp = line[15]
+        ld = line[16]
+        temp = line[17]
+        filtered_df = Github_urls[(Github_urls['Temp']== temp)]
+        filtered_df2 = filtered_df[(filtered_df['Laser_power']== lp)]
+        filtered_df3 = filtered_df2[(filtered_df2['Laser_Detuning']== ld)]
+        data_url = filtered_df3.iloc[0,0]
+        df = pd.read_table(data_url)
+        df.columns = df.iloc[0]
+        df =df.iloc[1:]
+        newdf = df.apply(pd.to_numeric)  
+        z_list = sorted(list(set(newdf['Z  Field (nT)'])))
+    else:
+        temp = clickData['points'][0]['y']
+        lp = clickData['points'][0]['x']
+        ld = clickData['points'][0]['z']
+        filtered_df = Github_urls[(Github_urls['Temp']== temp)]
+        filtered_df2 = filtered_df[(filtered_df['Laser_power']== lp)]
+        filtered_df3 = filtered_df2[(filtered_df2['Laser_Detuning']== ld)]
+        data_url = filtered_df3.iloc[0,0]
+        df = pd.read_table(data_url)
+        df.columns = df.iloc[0]
+        df =df.iloc[1:]
+        newdf = df.apply(pd.to_numeric)  
+        z_list = sorted(list(set(newdf['Z  Field (nT)'])))
+    if clickData2 == None:
+        x = -1500
+        y = -1000
+        z = -1000
+    else:
+        y = clickData2['points'][0]['y']
+        x = clickData2['points'][0]['x']
+        z_index = clickData2['points'][0]['curveNumber']
+        z = z_list[z_index]
+    A = 'Selected point: Bx = {}, By = {}, Bz = {}'.format(x,y,z)
+    return A
+
+## Callback for graph: transverse hanle
+@app.callback(
+  Output('click-data-3', 'figure'),
+  Input('facet', 'clickData'),
+  Input('graph-with-slider', 'clickData'))
+def display_click_data(clickData2, clickData):
+    if clickData == None:
+        x = 1406
+        line = df2.iloc[x,]
+        lp = line[15]
+        ld = line[16]
+        temp = line[17]
+        filtered_df = Github_urls[(Github_urls['Temp']== temp)]
+        filtered_df2 = filtered_df[(filtered_df['Laser_power']== lp)]
+        filtered_df3 = filtered_df2[(filtered_df2['Laser_Detuning']== ld)]
+        data_url = filtered_df3.iloc[0,0]
+        df = pd.read_table(data_url)
+        df.columns = df.iloc[0]
+        df =df.iloc[1:]
+        newdf = df.apply(pd.to_numeric)  
+        z_list = sorted(list(set(newdf['Z  Field (nT)'])))
+    else:
+        temp = clickData['points'][0]['y']
+        lp = clickData['points'][0]['x']
+        ld = clickData['points'][0]['z']
+        filtered_df = Github_urls[(Github_urls['Temp']== temp)]
+        filtered_df2 = filtered_df[(filtered_df['Laser_power']== lp)]
+        filtered_df3 = filtered_df2[(filtered_df2['Laser_Detuning']== ld)]
+        data_url = filtered_df3.iloc[0,0]
+        df = pd.read_table(data_url)
+        df.columns = df.iloc[0]
+        df =df.iloc[1:]
+        newdf = df.apply(pd.to_numeric)  
+        z_list = sorted(list(set(newdf['Z  Field (nT)'])))
+    if clickData2 == None:
+        x = -1500
+        y = -1000
+        z = -1000
+    else:
+        y = clickData2['points'][0]['y']
+        x = clickData2['points'][0]['x']
+        z_index = clickData2['points'][0]['curveNumber']
+        z = z_list[z_index]
+    filtered_df = newdf[(newdf['X  Field (nT)']== x)]
+    filtered_df2 = filtered_df[(filtered_df['Y  Field (nT)']== y)]
+    fig = px.line(filtered_df2, x='Z  Field (nT)', y='Photodiode Voltage (V)')
+    fig.update_traces(mode='markers+lines')  
+    fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest') #Change margins
+    fig.update_layout(height=150)
+    fig.update_layout(font=dict(size=8)) # Change font size
+    return fig
+
+## Callback for graph: longitudinal hanle
+@app.callback(
+  Output('click-data-4', 'figure'),
+  Input('facet', 'clickData'),
+  Input('graph-with-slider', 'clickData'))
+def display_click_data(clickData2, clickData):
+    if clickData == None:
+        x = 1406
+        line = df2.iloc[x,]
+        lp = line[15]
+        ld = line[16]
+        temp = line[17]
+        filtered_df = Github_urls[(Github_urls['Temp']== temp)]
+        filtered_df2 = filtered_df[(filtered_df['Laser_power']== lp)]
+        filtered_df3 = filtered_df2[(filtered_df2['Laser_Detuning']== ld)]
+        data_url = filtered_df3.iloc[0,0]
+        df = pd.read_table(data_url)
+        df.columns = df.iloc[0]
+        df =df.iloc[1:]
+        newdf = df.apply(pd.to_numeric)  
+        z_list = sorted(list(set(newdf['Z  Field (nT)'])))
+    else:
+        temp = clickData['points'][0]['y']
+        lp = clickData['points'][0]['x']
+        ld = clickData['points'][0]['z']
+        filtered_df = Github_urls[(Github_urls['Temp']== temp)]
+        filtered_df2 = filtered_df[(filtered_df['Laser_power']== lp)]
+        filtered_df3 = filtered_df2[(filtered_df2['Laser_Detuning']== ld)]
+        data_url = filtered_df3.iloc[0,0]
+        df = pd.read_table(data_url)
+        df.columns = df.iloc[0]
+        df =df.iloc[1:]
+        newdf = df.apply(pd.to_numeric)  
+        z_list = sorted(list(set(newdf['Z  Field (nT)'])))
+    if clickData2 == None:
+        x = -1500
+        y = -1000
+        z = -1000
+    else:
+        y = clickData2['points'][0]['y']
+        x = clickData2['points'][0]['x']
+        z_index = clickData2['points'][0]['curveNumber']
+        z = z_list[z_index]
+    filtered_df = newdf[(newdf['Z  Field (nT)']== z)]
+    filtered_df2 = filtered_df[(filtered_df['Y  Field (nT)']== y)]
+    fig = px.line(filtered_df2, x='X  Field (nT)', y='Photodiode Voltage (V)')
+    fig.update_traces(mode='markers+lines')  
+    fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest') #Change margins
+    fig.update_layout(height=150)
+    fig.update_layout(font=dict(size=8)) # Change font size
     return fig
 
 if __name__ == '__main__':
