@@ -133,7 +133,7 @@ app.layout = html.Div(children=[
                      ),  # Define the 1st column
              html.Div(className='five columns div-for-charts',
                       children = [
-                        html.H6('All Data'),
+                        html.H6('All Parameter Space Data'),
                         dcc.RadioItems(
                             id='value_dropdown',
                             options=[{"label": i, "value": i} for i in df2.columns[19:20]]+[{"label": i, "value": i} for i in df2.columns[0:7]],
@@ -159,7 +159,7 @@ app.layout = html.Div(children=[
                      ),  # Define the 3rd column
                html.Div(className='four columns div-for-charts',
                         children = [
-                            html.H6('Raw 3-Axis Data'),
+                            html.H6('3-Axis Raw Data'),
                             html.P('For single parameter space point Single Parameter Space Point Data', style={'fontSize': 12}),
                             dcc.Graph(id='facet',config={'displayModeBar': False}),
                             html.H6('Hanle'),
@@ -334,7 +334,7 @@ def update_figure(clickData):
     newdf["Z  Field (nT)"] = newdf["Z  Field (nT)"].round(2)
     fig = px.scatter(newdf, x="X  Field (nT)", y="Y  Field (nT)",
                      color="Photodiode Voltage (V)", facet_col="Z  Field (nT)",  facet_col_wrap=4, color_continuous_scale='aggrnyl')
-    fig.update_layout(yaxis=dict(scaleanchor='x', constrain='domain')) #Make axis equal (squares)
+    fig.update_layout(xaxis=dict(scaleanchor='y', constrain='domain')) #Make axis equal (squares)
     fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest') #Change margins
     fig.update_layout(font=dict(size=8)) # Change font size
     fig.for_each_annotation(lambda a: a.update(text=a.text.replace("Z  Field (nT)=", "Bz ="))) # change title of each facet
@@ -348,7 +348,7 @@ def update_figure(clickData):
     fig['layout']['xaxis5']['title']['text']=''
     ##fig.update_layout(coloraxis_showscale=False)
     fig.layout.coloraxis.colorbar.title = 'PD (V)'
-    fig.update_layout(height=500)
+    fig.update_layout(height=350)
     return fig
 
 ## Callback for selected data text hanle
@@ -444,7 +444,7 @@ def display_click_data(clickData2, clickData):
     filtered_df2 = filtered_df[(filtered_df['Y  Field (nT)']== y)]
     fig = px.line(filtered_df2, x='Z  Field (nT)', y='Photodiode Voltage (V)')
     fig.update_traces(mode='markers+lines')  
-    fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest') #Change margins
+    fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 10}, hovermode='closest') #Change margins
     fig.update_layout(height=150)
     fig.update_layout(font=dict(size=8)) # Change font size
     return fig
@@ -496,7 +496,7 @@ def display_click_data(clickData2, clickData):
     filtered_df2 = filtered_df[(filtered_df['Y  Field (nT)']== y)]
     fig = px.line(filtered_df2, x='X  Field (nT)', y='Photodiode Voltage (V)')
     fig.update_traces(mode='markers+lines')  
-    fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest') #Change margins
+    fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 10}, hovermode='closest') #Change margins
     fig.update_layout(height=150)
     fig.update_layout(font=dict(size=8)) # Change font size
     return fig
