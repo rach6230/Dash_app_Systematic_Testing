@@ -5,52 +5,26 @@ import pandas as pd
 import dash_table
 from dash.dependencies import Input, Output
 import plotly.express as px
-
 ########### Define your variables
 tabtitle='SERF: Systematic Testing'
 #### Import Fit Data
 ALL_data_fit_values = pd.read_csv('https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Full_fit_Data.csv')
-#V2
-ALL_data_fit_values_v2 = pd.read_csv('https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Full_fit_Data_V2.csv')
-
 # Create col of A/C:
 ALL_data_fit_values["V/nT"] =  abs(ALL_data_fit_values['A'])/abs(ALL_data_fit_values['C'])
-#V2
-ALL_data_fit_values_v2["V/nT"] =  abs(ALL_data_fit_values_v2['A'])/abs(ALL_data_fit_values_v2['C'])
-
 ## Load data
-df = ALL_data_fit_values
-
-# File names
-Github_urls_v1= pd.read_csv("https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Data_pt2/Github_urls_sorted.csv")
-#v2
-Github_urls_v2 = pd.read_csv("https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Version_2_Data_1/Github_urls_sortedV2.csv")
-
-
+df2 = ALL_data_fit_values
+# Inital data to show (selected point)
+x = 1406
+## File path data for each raw data file
+Github_urls = pd.read_csv("https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Data_pt2/Github_urls_sorted.csv")
 ## PP slider values
-if ALL_data_fit_values['PP'].max()>ALL_data_fit_values_v2['PP'].max():
-    S_MAX = ALL_data_fit_values['PP'].max()
-else:
-    S_MAX = ALL_data_fit_values_v2['PP'].max()
-
-if ALL_data_fit_values['PP'].min()<ALL_data_fit_values_v2['PP'].min():
-    S_MIN = ALL_data_fit_values['PP'].min()
-else:
-    S_MIN = ALL_data_fit_values_v2['PP'].min()
+S_MIN = min(df2['PP'])
+S_MAX = max(df2['PP'])
 S_STEP = (S_MIN+S_MAX)/1000
-
 ## MSE slider values
-if ALL_data_fit_values['MSE'].max()>ALL_data_fit_values_v2['MSE'].max():
-    MSE_MAX = ALL_data_fit_values['MSE'].max()
-else:
-    MSE_MAX = ALL_data_fit_values_v2['MSE'].max()
-
-if ALL_data_fit_values['MSE'].min()<ALL_data_fit_values_v2['MSE'].min():
-    MSE_MIN = ALL_data_fit_values['MSE'].min()
-else:
-    MSE_MIN = ALL_data_fit_values_v2['MSE'].min()
+MSE_MIN = min(df2['MSE'])
+MSE_MAX = max(df2['MSE'])
 MSE_STEP = (MSE_MIN+MSE_MAX)/1000
-
 ## Colour values
 colors = {
     'background': '#f2f2f2',
@@ -165,14 +139,6 @@ app.layout = html.Div(children=[
                             labelStyle={'display': 'inline-block'},
                             style={'fontSize': 12}
                         ),  
-                        dcc.Dropdown(
-                            id='segselect',
-                            options=[
-                                {'label': 'Systematic Testing V1', 'value': 'ST1'},
-                                {'label': 'Systematic Testing V2', 'value': 'ST2'},
-                            ],
-                            value='ST1'
-                        ),    
                         dcc.Graph(id='graph-with-slider',config={'displayModeBar': False}),
                         html.Br(), #new line
                         html.H6('Single Parameter Space Point Data'),
@@ -206,19 +172,12 @@ app.layout = html.Div(children=[
           )
 ]
 )
-
 ## Callback for selected data text
 @app.callback(
   Output('click-data', 'children'),
-  Input('graph-with-slider', 'clickData'),
-  Input('segselect', 'value'))
-def display_click_data(clickData, data_version):
-  if data_version == 'ST1':
-    df2 = ALL_data_fit_values
-  else:
-    df2 = ALL_data_fit_values_v2
+  Input('graph-with-slider', 'clickData'))
+def display_click_data(clickData):
   if clickData == None:
-    x = 140
     line = df2.iloc[x,] 
     lp = line[15]
     ld = line[16]
@@ -232,7 +191,6 @@ def display_click_data(clickData, data_version):
     vnt = clickData['points'][0]['marker.color']
     A = 'Temperature ={}°C, Laser Power = {}μW, Laser Detuning = {}GHz, V/nT = {}'.format(temp, lp, ld, vnt)
   return A
-
 ## Call back for TEMP slider indicator
 @app.callback(Output('TEMP_slider-drag-output', 'children'),
               [Input('temp-range-slider', 'value')]
@@ -280,13 +238,8 @@ def display_value(value):
               Input('LD-range-slider', 'value'),
               Input('PP-slider', 'value'),
               Input('MSE-slider', 'value'),
-              Input('value_dropdown', 'value'),
-              Input('segselect', 'value'))
-def update_figure(TEMP, LP, vnt, LD, PP, MSE, col, data_version):
-  if data_version == 'ST1':
-    df2 = ALL_data_fit_values
-  else:
-    df2 = ALL_data_fit_values_v2    
+              Input('value_dropdown', 'value'))
+def update_figure(TEMP, LP, vnt, LD, PP, MSE, col):
   filtered_df = df2[(df2['PP']< PP)&(df2['MSE']< MSE)&
                     (df2['Temp']<= TEMP[1])&(df2['Temp']>= TEMP[0])&
                     (df2['Laser_Power']<= LP[1])&(df2['Laser_Power']>= LP[0])&
@@ -294,23 +247,16 @@ def update_figure(TEMP, LP, vnt, LD, PP, MSE, col, data_version):
                     (df2['Laser_Detuning']<= LD[1])&(df2['Laser_Detuning']>= LD[0])]
   fig = px.scatter_3d(filtered_df, y='Temp', z='Laser_Detuning', x='Laser_Power', color=col)
   fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest')
-  fig.update_layout(transition_duration=500)
-  fig.update_layout(height=300)
+  ##fig.update_layout(transition_duration=500)
+  fig.update_layout(height=400)
   return fig
-
-
 ## Callback for table
 @app.callback(
     Output("my-table", "data"),
-    Input('graph-with-slider', 'clickData'), 
-    Input('segselect', 'value'))
-def on_trace_click(clickData, data_version):
-    if data_version == 'ST1':
-        df2 = ALL_data_fit_values
-    else:
-        df2 = ALL_data_fit_values_v2
+    Input('graph-with-slider', 'clickData'))
+def on_trace_click(clickData):
     if clickData== None:
-        x = 140
+        x = 1406
         line = df2.iloc[x,] 
         lp = line[15]
         ld = line[16]
@@ -334,15 +280,10 @@ def on_trace_click(clickData, data_version):
 ## Callback for error table
 @app.callback(
     Output("my-table2", "data"),
-    Input('graph-with-slider', 'clickData'), 
-    Input('segselect', 'value'))
-def on_trace_click(clickData, data_version):
-    if data_version == 'ST1':
-        df2 = ALL_data_fit_values
-    else:
-        df2 = ALL_data_fit_values_v2
+    Input('graph-with-slider', 'clickData'))
+def on_trace_click(clickData):
     if clickData== None:
-        x = 140
+        x = 1406
         line = df2.iloc[x,] 
         lp = line[15]
         ld = line[16]
@@ -366,15 +307,8 @@ def on_trace_click(clickData, data_version):
 ## Call back for updating facet
 @app.callback(
     Output('facet', 'figure'),
-    Input('graph-with-slider', 'clickData'), 
-    Input('segselect', 'value'))
-def update_figure(clickData, data_version):
-    if data_version == 'ST1':
-        df2 = ALL_data_fit_values
-        Github_urls = Github_urls_v1
-    else:
-        df2 = ALL_data_fit_values_v2 
-        Github_urls = Github_urls_v2
+    Input('graph-with-slider', 'clickData'))
+def update_figure(clickData):
     if clickData == None:
         line = df2.iloc[x,] 
         lp = line[15]
@@ -399,34 +333,26 @@ def update_figure(clickData, data_version):
     fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest') #Change margins
     fig.update_layout(font=dict(size=8)) # Change font size
     fig.for_each_annotation(lambda a: a.update(text=a.text.replace("Z  Field (nT)=", "Bz ="))) # change title of each facet
-    fig['layout']['yaxis6']['title']['text']=''
+    fig['layout']['yaxis5']['title']['text']=''
     fig['layout']['yaxis']['title']['text']=''
-    fig['layout']['yaxis16']['title']['text']=''
+    fig['layout']['yaxis13']['title']['text']=''
+    fig['layout']['yaxis17']['title']['text']=''    
     fig['layout']['xaxis']['title']['text']=''
-    fig['layout']['xaxis']['title']['text']=''
-    fig['layout']['xaxis2']['title']['text']=''
+    fig['layout']['xaxis3']['title']['text']=''
     fig['layout']['xaxis4']['title']['text']=''
-    fig['layout']['xaxis5']['title']['text']=''
     ##fig.update_layout(coloraxis_showscale=False)
     fig.layout.coloraxis.colorbar.title = 'PD (V)'
-    fig.update_layout(height=400)
+    fig.update_layout(height=450)
     return fig
 
 ## Callback for selected data text hanle
 @app.callback(
   Output('click-data-2', 'children'),
   Input('facet', 'clickData'),
-  Input('graph-with-slider', 'clickData'), 
-  Input('segselect', 'value'))
-def display_click_data(clickData2, clickData, data_version):
-    if data_version == 'ST1':
-        df2 = ALL_data_fit_values
-        Github_urls = Github_urls_v1
-    else:
-        df2 = ALL_data_fit_values_v2 
-        Github_urls = Github_urls_v2  
+  Input('graph-with-slider', 'clickData'))
+def display_click_data(clickData2, clickData):
     if clickData == None:
-        x = 140
+        x = 1406
         line = df2.iloc[x,]
         lp = line[15]
         ld = line[16]
@@ -464,22 +390,14 @@ def display_click_data(clickData2, clickData, data_version):
         z = z_list[z_index]
     A = 'Selected point: Bx = {}, By = {}, Bz = {}'.format(x,y,z)
     return A
-
 ## Callback for graph: transverse hanle
 @app.callback(
   Output('click-data-3', 'figure'),
   Input('facet', 'clickData'),
-  Input('graph-with-slider', 'clickData'), 
-  Input('segselect', 'value'))
-def display_click_data(clickData2, clickData, data_version):
-    if data_version == 'ST1':
-        df2 = ALL_data_fit_values
-        Github_urls = Github_urls_v1
-    else:
-        df2 = ALL_data_fit_values_v2 
-        Github_urls = Github_urls_v2      
+  Input('graph-with-slider', 'clickData'))
+def display_click_data(clickData2, clickData):
     if clickData == None:
-        x = 140
+        x = 1406
         line = df2.iloc[x,]
         lp = line[15]
         ld = line[16]
@@ -523,22 +441,14 @@ def display_click_data(clickData2, clickData, data_version):
     fig.update_layout(height=150)
     fig.update_layout(font=dict(size=8)) # Change font size
     return fig
-
 ## Callback for graph: longitudinal hanle
 @app.callback(
   Output('click-data-4', 'figure'),
   Input('facet', 'clickData'),
-  Input('graph-with-slider', 'clickData'), 
-  Input('segselect', 'value'))
-def display_click_data(clickData2, clickData, data_version):
-    if data_version == 'ST1':
-        df2 = ALL_data_fit_values
-        Github_urls = Github_urls_v1
-    else:
-        df2 = ALL_data_fit_values_v2 
-        Github_urls = Github_urls_v2        
+  Input('graph-with-slider', 'clickData'))
+def display_click_data(clickData2, clickData):
     if clickData == None:
-        x = 140
+        x = 1406
         line = df2.iloc[x,]
         lp = line[15]
         ld = line[16]
@@ -582,6 +492,5 @@ def display_click_data(clickData2, clickData, data_version):
     fig.update_layout(height=150)
     fig.update_layout(font=dict(size=8)) # Change font size
     return fig
-
 if __name__ == '__main__':
     app.run_server()
