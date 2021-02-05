@@ -161,6 +161,14 @@ app.layout = html.Div(children=[
              html.Div(className='five columns div-for-charts',
                       children = [
                         html.H6('All Parameter Space Data'),
+                        dcc.Dropdown(
+                            id='segselect',
+                            options=[
+                                {'label': 'Systematic Testing V1', 'value': 'ST1'},
+                                {'label': 'Systematic Testing V2', 'value': 'ST2'},
+                            ],
+                            value='ST2'
+                        ),     
                         dcc.RadioItems(
                             id='value_dropdown',
                             options=[{"label": i, "value": i} for i in df.columns[19:20]]+[{"label": i, "value": i} for i in df.columns[0:7]],
@@ -168,15 +176,7 @@ app.layout = html.Div(children=[
                             inputStyle={"margin-left": "20px"}, # add space between radio items
                             labelStyle={'display': 'inline-block'},
                             style={'fontSize': 12}
-                        ),  
-                        dcc.Dropdown(
-                            id='segselect',
-                            options=[
-                                {'label': 'Systematic Testing V1', 'value': 'ST1'},
-                                {'label': 'Systematic Testing V2', 'value': 'ST2'},
-                            ],
-                            value='ST1'
-                        ),                           
+                        ),                            
                         dcc.Graph(id='graph-with-slider',config={'displayModeBar': False}),
                         html.Br(), #new line
                         html.H6('Single Parameter Space Point Data'),
