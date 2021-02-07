@@ -155,7 +155,10 @@ app.layout = html.Div(children=[
                                          MSE_MAX*0.75: {'label': '75 %'},
                                          MSE_MAX: {'label': '100%', 'style': {'color': '#f50'}}
                                      }
-                                    )
+                                    ),
+                          html.Br(), #new line
+                          html.P('Data Set Details:'),
+                          dcc.Markdown(id='Markdown_notes', style={'fontSize': 12}),
                       ]
                      ),  # Define the 1st column
              html.Div(className='five columns div-for-charts',
@@ -210,6 +213,30 @@ app.layout = html.Div(children=[
           )
 ]
 )
+
+## Callbacks for selected data details
+@app.callback(
+  Output('Markdown_notes', 'children'),
+  Input('segselect', 'value'))
+def display_click_data(data_version):
+  if data_version == 'ST1':
+    A = '''
+* **Testing type**: Systematic of all parameter space 
+* **Heater Driver**: Audio Amp, 100kHz, Sine
+* **Coil Drivers**: DAQ
+* **Heaters**: 2x4.2 ohm thick film (magnetic)
+* **Cell**: Cs
+* **Notes**: Laser power not varying correctly during scans, all values taken at approx ~100uW'''
+  else:
+    A = '''
+* **Testing type**: Systematic of all parameter space 
+* **Heater Driver**: MOSFET, 150kHz, square
+* **Coil Drivers**: DAQ
+* **Heaters**: 2x4.2 ohm thick film (magnetic)
+* **Cell**: Cs
+* **Notes**: '''
+  return A
+
 ## Callback for selected data text
 @app.callback(
   Output('click-data', 'children'),
@@ -407,14 +434,14 @@ def update_figure(clickData, data_version):
     fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest') #Change margins
     fig.update_layout(font=dict(size=8)) # Change font size
     fig.for_each_annotation(lambda a: a.update(text=a.text.replace("Z  Field (nT)=", "Bz ="))) # change title of each facet
-    fig['layout']['yaxis6']['title']['text']=''
     fig['layout']['yaxis']['title']['text']=''
-    fig['layout']['yaxis16']['title']['text']=''
+    fig['layout']['yaxis5']['title']['text']=''
+    fig['layout']['yaxis13']['title']['text']=''
+    fig['layout']['yaxis17']['title']['text']=''
     fig['layout']['xaxis']['title']['text']=''
     fig['layout']['xaxis']['title']['text']=''
-    fig['layout']['xaxis2']['title']['text']=''
+    fig['layout']['xaxis3']['title']['text']=''
     fig['layout']['xaxis4']['title']['text']=''
-    fig['layout']['xaxis5']['title']['text']=''
     ##fig.update_layout(coloraxis_showscale=False)
     fig.layout.coloraxis.colorbar.title = 'PD (V)'
     fig.update_layout(height=400)
