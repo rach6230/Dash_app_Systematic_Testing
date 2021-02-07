@@ -299,6 +299,10 @@ def update_figure(TEMP, LP, vnt, LD, PP, MSE, col, data_version):
   fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest')
   fig.update_layout(transition_duration=500)
   fig.update_layout(height=300)
+  fig.update_layout(scene = dict(
+                    xaxis_title='Laser Power (μW)',
+                    yaxis_title='Temperature (°C)',
+                    zaxis_title='Laser_Detuning (GHz)'))
   return fig
 
 
