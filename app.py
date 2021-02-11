@@ -199,22 +199,45 @@ app.layout = html.Div(children=[
                      ),  # Define the 3rd column
                html.Div(className='four columns div-for-charts',
                         children = [
-                            html.H6('3-Axis Raw Data'),
-                            html.P('For Single Parameter Space Point', style={'fontSize': 12}),
-                            dcc.Graph(id='facet',config={'displayModeBar': False}),
-                            html.H6('Hanle'),
-                            html.Div(id='click-data-2', style={'fontSize': 12}),
-                            html.P('Transverse'),
-                            dcc.Graph(id='click-data-4',config={'displayModeBar': False}),
-                            html.P('Longitudinal'),
-                            dcc.Graph(id='click-data-3',config={'displayModeBar': False}),                           
-                            html.Br(), #new lin
+                            dcc.RadioItems(
+                                id='value_dropdown_2',
+                                options=[{"label": i, "value": i} for i in ["Hanle", "Plotter"]],
+                                value='Hanle',
+                                inputStyle={"margin-left": "20px"}, # add space between radio items
+                                labelStyle={'display': 'inline-block'},
+                                style={'fontSize': 12}
+                                ), 
+                            html.Div(id='hide_hanle_box',
+                                     children = [
+                                         html.H6('3-Axis Raw Data'),
+                                         html.P('For Single Parameter Space Point', style={'fontSize': 12}),
+                                         dcc.Graph(id='facet',config={'displayModeBar': False}),
+                                         html.H6('Hanle'),
+                                         html.Div(id='click-data-2', style={'fontSize': 12}),
+                                         html.P('Transverse'),
+                                         dcc.Graph(id='click-data-4',config={'displayModeBar': False}),
+                                         html.P('Longitudinal'),
+                                         dcc.Graph(id='click-data-3',config={'displayModeBar': False}),                           
+                                         html.Br(), #new lin
+                                     ]
+                                    ),                            
                       ]
                      ),  # Define the 3rd column
            ]
           )
 ]
 )
+
+## Callback for hiding 3D hanle
+@app.callback(
+   Output('hide_hanle_box', 'style'),
+   [Input('value_dropdown_2', 'value')])
+
+def show_hide_element(visibility_state):
+    if visibility_state == 'Hanle':
+        return {'display': 'block'}
+    if visibility_state == 'Plotter':
+        return {'display': 'none'}
 
 ## Callbacks for selected data details
 @app.callback(
