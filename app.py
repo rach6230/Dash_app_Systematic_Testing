@@ -226,15 +226,19 @@ app.layout = html.Div(children=[
                                          html.P('X'),
                                          dcc.Dropdown(
                                              id='x_value_dropdown',
-                                             options=[{"label": i, "value": i} for i in df.columns[0:21]],
-                                             value='Laser_Power',
+                                             options=[{"label": i, "value": i} for i in ['G1', 'G2', 'C (nT)', 'A (V)', 'Bx (nT)', 'By (nT)', 'Bz (nT)', 'Error_G1', 'Error_G2',
+                                                                                         'Error_C', 'Error_A', 'Error_Bx', 'Error_By', 'Error_Bz', 'MSE',
+                                                                                         'Laser Power (μW)', 'Laser Detuning (GHz)', 'Temperature (°C)', 'PP', 'V/nT', 'SE']],
+                                             value='Laser Power (μW)',
                                              style={'fontSize': 12}
                                          ), 
                                          html.P('Y'),
                                          dcc.Dropdown(
                                              id='y_value_dropdown',
-                                             options=[{"label": i, "value": i} for i in df.columns[0:21]],
-                                             value='Laser_Detuning',
+                                             options=[{"label": i, "value": i} for i in ['G1', 'G2', 'C (nT)', 'A (V)', 'Bx (nT)', 'By (nT)', 'Bz (nT)', 'Error_G1', 'Error_G2',
+                                                                                         'Error_C', 'Error_A', 'Error_Bx', 'Error_By', 'Error_Bz', 'MSE',
+                                                                                         'Laser Power (μW)', 'Laser Detuning (GHz)', 'Temperature (°C)', 'PP', 'V/nT', 'SE']],
+                                             value='Laser Detuning (GHz)',
                                              style={'fontSize': 12}
                                          ), 
                                          html.P('Colour (optional)'),
@@ -275,6 +279,9 @@ def update_figure(TEMP, LP, vnt, LD, PP, MSE,  data_version, x_value, y_value, z
                     (df2['Laser_Power']<= LP[1])&(df2['Laser_Power']>= LP[0])&
                     (df2['V/nT']<= vnt[1])&(df2['V/nT']>= vnt[0])&
                     (df2['Laser_Detuning']<= LD[1])&(df2['Laser_Detuning']>= LD[0])]
+  filtered_df.columns = ['G1', 'G2', 'C (nT)', 'A (V)', 'Bx (nT)', 'By (nT)', 'Bz (nT)', 'Error_G1', 'Error_G2',
+                         'Error_C', 'Error_A', 'Error_Bx', 'Error_By', 'Error_Bz', 'MSE',
+                         'Laser Power (μW)', 'Laser Detuning (GHz)', 'Temperature (°C)', 'PP', 'V/nT', 'SE']
   if z_value =="":
         fig = px.scatter(filtered_df, y=y_value, x=x_value)
   if z_value !="":
@@ -420,7 +427,7 @@ def update_figure(TEMP, LP, vnt, LD, PP, MSE, col, data_version):
   fig.update_layout(scene = dict(
                     xaxis_title='Laser Power (μW)',
                     yaxis_title='Temperature (°C)',
-                    zaxis_title='Laser_Detuning (GHz)'))
+                    zaxis_title='Laser Detuning (GHz)'))
   return fig
 
 
