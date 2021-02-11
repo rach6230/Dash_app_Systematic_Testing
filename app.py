@@ -16,8 +16,10 @@ ALL_data_fit_values_v2 = pd.read_csv('https://raw.githubusercontent.com/rach6230
 
 # Create col of A/C:
 ALL_data_fit_values["V/nT"] =  abs(ALL_data_fit_values['A'])/abs(ALL_data_fit_values['C'])
+ALL_data_fit_values["SE"] =  abs(ALL_data_fit_values['G2'])-abs(ALL_data_fit_values['G1'])
 #V2
 ALL_data_fit_values_v2["V/nT"] =  abs(ALL_data_fit_values_v2['A'])/abs(ALL_data_fit_values_v2['C'])
+ALL_data_fit_values_v2["SE"] =  abs(ALL_data_fit_values_v2['G2'])-abs(ALL_data_fit_values_v2['G1'])
 
 ## Load data for sliders
 df = ALL_data_fit_values
@@ -174,7 +176,7 @@ app.layout = html.Div(children=[
                         ),     
                         dcc.RadioItems(
                             id='value_dropdown',
-                            options=[{"label": i, "value": i} for i in df.columns[19:20]]+[{"label": i, "value": i} for i in df.columns[0:7]],
+                            options=[{"label": i, "value": i} for i in df.columns[19:21]]+[{"label": i, "value": i} for i in df.columns[0:7]],
                             value='V/nT',
                             inputStyle={"margin-left": "20px"}, # add space between radio items
                             labelStyle={'display': 'inline-block'},
