@@ -220,14 +220,80 @@ app.layout = html.Div(children=[
                                          dcc.Graph(id='click-data-3',config={'displayModeBar': False}),                           
                                          html.Br(), #new lin
                                      ]
-                                    ),                            
+                                    ),       
+                            html.Div(id='hide_plotter_box',
+                                     children = [
+                                         html.P('X'),
+                                         dcc.Dropdown(
+                                             id='x_value_dropdown',
+                                             options=[{"label": i, "value": i} for i in df.columns[0:21]],
+                                             value='Laser_Power',
+                                             style={'fontSize': 12}
+                                         ), 
+                                         html.P('Y'),
+                                         dcc.Dropdown(
+                                             id='y_value_dropdown',
+                                             options=[{"label": i, "value": i} for i in df.columns[0:21]],
+                                             value='Laser_Detuning',
+                                             style={'fontSize': 12}
+                                         ), 
+                                         html.P('Colour (optional)'),
+                                         dcc.Dropdown(
+                                             id='z_value_dropdown',
+                                             options=[{"label": i, "value": i} for i in df.columns[0:21]],
+                                             value='',
+                                             style={'fontSize': 12}
+                                         ), 
+                                         dcc.Graph(id='custom_plot',config={'displayModeBar': True}),
+                                     ]
+                                    )
                       ]
                      ),  # Define the 3rd column
            ]
           )
 ]
 )
+## Call back for updating custom graph
+@app.callback(Output('custom_plot', 'figure'),
+              Input('temp-range-slider', 'value'),
+              Input('LP-range-slider', 'value'),
+              Input('vnt-range-slider', 'value'),
+              Input('LD-range-slider', 'value'),
+              Input('PP-slider', 'value'),
+              Input('MSE-slider', 'value'),
+              Input('segselect', 'value'),
+              Input('x_value_dropdown', 'value'),
+              Input('y_value_dropdown', 'value'),
+              Input('z_value_dropdown', 'value'))
+def update_figure(TEMP, LP, vnt, LD, PP, MSE,  data_version, x_value, y_value, z_value):
+  if data_version == 'ST1':
+    df2 = ALL_data_fit_values
+  else:
+    df2 = ALL_data_fit_values_v2    
+  filtered_df = df2[(df2['PP']< PP)&(df2['MSE']< MSE)&
+                    (df2['Temp']<= TEMP[1])&(df2['Temp']>= TEMP[0])&
+                    (df2['Laser_Power']<= LP[1])&(df2['Laser_Power']>= LP[0])&
+                    (df2['V/nT']<= vnt[1])&(df2['V/nT']>= vnt[0])&
+                    (df2['Laser_Detuning']<= LD[1])&(df2['Laser_Detuning']>= LD[0])]
+  if z_value =="":
+        fig = px.scatter(filtered_df, y=y_value, x=x_value)
+  if z_value !="":
+    fig = px.scatter(filtered_df, y=y_value, x=x_value, color=z_value)
+  fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest')
+  fig.update_layout(height=300)  
+  return fig
 
+## Callback for hiding plotter
+@app.callback(
+   Output('hide_plotter_box', 'style'),
+   [Input('value_dropdown_2', 'value')])
+
+def show_hide_element(visibility_state):
+    if visibility_state == 'Plotter':
+        return {'display': 'block'}
+    if visibility_state == 'Hanle':
+        return {'display': 'none'}
+    
 ## Callback for hiding 3D hanle
 @app.callback(
    Output('hide_hanle_box', 'style'),
