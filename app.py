@@ -282,7 +282,7 @@ def update_figure(TEMP, LP, vnt, LD, PP, MSE,  data_version, x_value, y_value, z
         fig = px.scatter(filtered_df, y=y_value, x=x_value)
   if z_value !="":
     fig = px.scatter(filtered_df, y=y_value, x=x_value, color=z_value)
-  fig.update_layout(margin={'l': 0, 'b': 0, 't': 10, 'r': 0}, hovermode='closest')
+  fig.update_layout(margin={'l': 0, 'b': 0, 't': 20, 'r': 0}, hovermode='closest')
   fig.update_layout(height=300)  
   return fig
 
