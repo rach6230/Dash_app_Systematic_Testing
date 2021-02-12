@@ -240,7 +240,9 @@ app.layout = html.Div(children=[
                                          html.P('Colour (optional)'),
                                          dcc.Dropdown(
                                              id='z_value_dropdown',
-                                             options=[{"label": i, "value": i} for i in df.columns[0:21]],
+                                             options=[{"label": i, "value": i} for i in ['G1', 'G2', 'C (nT)', 'A (V)', 'Bx (nT)', 'By (nT)', 'Bz (nT)', 'Error_G1', 'Error_G2',
+                                                                                         'Error_C', 'Error_A', 'Error_Bx', 'Error_By', 'Error_Bz', 'MSE',
+                                                                                         'Laser Power (μW)', 'Laser Detuning (GHz)', 'Temperature (°C)', 'PP', 'V/nT', 'SE']],
                                              value='',
                                              style={'fontSize': 12}                                         ), 
                                          dcc.Graph(id='custom_plot',config={'displayModeBar': True}),
@@ -282,7 +284,7 @@ def update_figure(TEMP, LP, vnt, LD, PP, MSE,  data_version, x_value, y_value, z
         fig = px.scatter(filtered_df, y=y_value, x=x_value)
   if z_value !="":
     fig = px.scatter(filtered_df, y=y_value, x=x_value, color=z_value)
-  fig.update_layout(margin={'l': 0, 'b': 0, 't': 20, 'r': 0}, hovermode='closest')
+  fig.update_layout(margin={'l': 0, 'b': 0, 't': 30, 'r': 0}, hovermode='closest')
   fig.update_layout(height=300)  
   return fig
 
