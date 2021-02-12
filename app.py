@@ -223,31 +223,45 @@ app.layout = html.Div(children=[
                                     ),       
                             html.Div(id='hide_plotter_box',
                                      children = [
-                                         html.P('X'),
-                                         dcc.Dropdown(
-                                             id='x_value_dropdown',
-                                             options=[{"label": i, "value": i} for i in ['G1', 'G2', 'C (nT)', 'A (V)', 'Bx (nT)', 'By (nT)', 'Bz (nT)', 'Error_G1', 'Error_G2',
-                                                                                         'Error_C', 'Error_A', 'Error_Bx', 'Error_By', 'Error_Bz', 'MSE',
-                                                                                         'Laser Power (μW)', 'Laser Detuning (GHz)', 'Temperature (°C)', 'PP', 'V/nT', 'SE']],
-                                             value='Laser Power (μW)',
-                                             style={'fontSize': 12}
+                                         html.Div(
+                                             [
+                                                 dcc.Dropdown(
+                                                     id='x_value_dropdown',
+                                                     options=[{"label": i, "value": i} for i in ['G1', 'G2', 'C (nT)', 'A (V)', 'Bx (nT)', 'By (nT)', 'Bz (nT)', 'Error_G1', 'Error_G2',
+                                                                                                 'Error_C', 'Error_A', 'Error_Bx', 'Error_By', 'Error_Bz', 'MSE',
+                                                                                                 'Laser Power (μW)', 'Laser Detuning (GHz)', 'Temperature (°C)', 'PP', 'V/nT', 'SE']],
+                                                     value='',
+                                                     style=dict(width='60%')),
+                                                 html.P(': X'),
+                                             ],
+                                             style=dict(display='flex')
                                          ), 
-                                         html.P('Y'),
-                                         dcc.Dropdown(
-                                             id='y_value_dropdown',
-                                             options=[{"label": i, "value": i} for i in ['G1', 'G2', 'C (nT)', 'A (V)', 'Bx (nT)', 'By (nT)', 'Bz (nT)', 'Error_G1', 'Error_G2',
-                                                                                         'Error_C', 'Error_A', 'Error_Bx', 'Error_By', 'Error_Bz', 'MSE',
-                                                                                         'Laser Power (μW)', 'Laser Detuning (GHz)', 'Temperature (°C)', 'PP', 'V/nT', 'SE']],
-                                             value='Laser Detuning (GHz)',
-                                             style={'fontSize': 12}
+                                         html.Div(
+                                             [
+                                                 dcc.Dropdown(
+                                                     id='y_value_dropdown',
+                                                     options=[{"label": i, "value": i} for i in ['G1', 'G2', 'C (nT)', 'A (V)', 'Bx (nT)', 'By (nT)', 'Bz (nT)', 'Error_G1', 'Error_G2',
+                                                                                                 'Error_C', 'Error_A', 'Error_Bx', 'Error_By', 'Error_Bz', 'MSE',
+                                                                                                 'Laser Power (μW)', 'Laser Detuning (GHz)', 'Temperature (°C)', 'PP', 'V/nT', 'SE']],
+                                                     value='',
+                                                     style=dict(width='60%',verticalAlign="middle"),
+                                                 html.P(': Y'),
+                                             ],
+                                             style=dict(display='flex')
                                          ), 
-                                         html.P('Colour (optional)'),
-                                         dcc.Dropdown(
-                                             id='z_value_dropdown',
-                                             options=[{"label": i, "value": i} for i in df.columns[0:21]],
-                                             value='',
-                                             style={'fontSize': 12}
-                                         ), 
+                                         html.Div(
+                                             [
+                                                 dcc.Dropdown(
+                                                     id='z_value_dropdown',
+                                                     options=[{"label": i, "value": i} for i in ['G1', 'G2', 'C (nT)', 'A (V)', 'Bx (nT)', 'By (nT)', 'Bz (nT)', 'Error_G1', 'Error_G2',
+                                                                                                 'Error_C', 'Error_A', 'Error_Bx', 'Error_By', 'Error_Bz', 'MSE',
+                                                                                                 'Laser Power (μW)', 'Laser Detuning (GHz)', 'Temperature (°C)', 'PP', 'V/nT', 'SE']],
+                                                     value='',
+                                                     style=dict(width='60%')),
+                                                 html.P(': Colour (optional)'),
+                                             ],
+                                             style=dict(display='flex')
+                                         ),
                                          dcc.Graph(id='custom_plot',config={'displayModeBar': True}),
                                      ]
                                     )
