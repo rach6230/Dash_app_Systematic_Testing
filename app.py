@@ -14,7 +14,7 @@ ALL_data_fit_values = pd.read_csv('https://raw.githubusercontent.com/rach6230/Da
 #V2
 ALL_data_fit_values_v2 = pd.read_csv('https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Full_fit_Data_V2.csv')
 
-# Create col of A/C:
+# Create col of A/C and SE:
 ALL_data_fit_values["V/nT"] =  abs(ALL_data_fit_values['A'])/abs(ALL_data_fit_values['C'])
 ALL_data_fit_values["SE"] =  abs(ALL_data_fit_values['G2'])-abs(ALL_data_fit_values['G1'])
 #V2
@@ -23,12 +23,10 @@ ALL_data_fit_values_v2["SE"] =  abs(ALL_data_fit_values_v2['G2'])-abs(ALL_data_f
 
 ## Load data for sliders
 df = ALL_data_fit_values
-
 # File names
 Github_urls_v1= pd.read_csv("https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Data_pt2/Github_urls_sorted.csv")
 #v2
 Github_urls_v2 = pd.read_csv("https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Version_2_Data_1/Github_urls_sortedV2.csv")
-
 
 # Inital data to show (selected point)
 x = 140
@@ -38,7 +36,6 @@ if ALL_data_fit_values['PP'].max()>ALL_data_fit_values_v2['PP'].max():
     S_MAX = ALL_data_fit_values['PP'].max()
 else:
     S_MAX = ALL_data_fit_values_v2['PP'].max()
-
 if ALL_data_fit_values['PP'].min()<ALL_data_fit_values_v2['PP'].min():
     S_MIN = ALL_data_fit_values['PP'].min()
 else:
@@ -50,7 +47,6 @@ if ALL_data_fit_values['MSE'].max()>ALL_data_fit_values_v2['MSE'].max():
     MSE_MAX = ALL_data_fit_values['MSE'].max()
 else:
     MSE_MAX = ALL_data_fit_values_v2['MSE'].max()
-
 if ALL_data_fit_values['MSE'].min()<ALL_data_fit_values_v2['MSE'].min():
     MSE_MIN = ALL_data_fit_values['MSE'].min()
 else:
@@ -62,13 +58,14 @@ colors = {
     'background': '#f2f2f2',
     'text': '#7FDBFF'
 }
+
 ########### Initiate the app
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 server = app.server
 app.title=tabtitle
+
 ########### Set up the layout
-#Empty layout
 app.layout = html.Div(children=[
   html.Div(className='row',  # Define the row elemen
            children=[
@@ -223,45 +220,29 @@ app.layout = html.Div(children=[
                                     ),       
                             html.Div(id='hide_plotter_box',
                                      children = [
-                                         html.Div(
-                                             [
-                                                 dcc.Dropdown(
-                                                     id='x_value_dropdown',
-                                                     options=[{"label": i, "value": i} for i in ['G1', 'G2', 'C (nT)', 'A (V)', 'Bx (nT)', 'By (nT)', 'Bz (nT)', 'Error_G1', 'Error_G2',
-                                                                                                 'Error_C', 'Error_A', 'Error_Bx', 'Error_By', 'Error_Bz', 'MSE',
-                                                                                                 'Laser Power (μW)', 'Laser Detuning (GHz)', 'Temperature (°C)', 'PP', 'V/nT', 'SE']],
-                                                     value='',
-                                                     style=dict(width='60%')),
-                                                 html.P(': X'),
-                                             ],
-                                             style=dict(display='flex')
+                                         html.P('X'),
+                                         dcc.Dropdown(
+                                             id='x_value_dropdown',
+                                             options=[{"label": i, "value": i} for i in ['G1', 'G2', 'C (nT)', 'A (V)', 'Bx (nT)', 'By (nT)', 'Bz (nT)', 'Error_G1', 'Error_G2',
+                                                                                         'Error_C', 'Error_A', 'Error_Bx', 'Error_By', 'Error_Bz', 'MSE',
+                                                                                         'Laser Power (μW)', 'Laser Detuning (GHz)', 'Temperature (°C)', 'PP', 'V/nT', 'SE']],
+                                             value='Laser Power (μW)',
+                                             style={'fontSize': 12}                                         ), 
+                                         html.P('Y'),
+                                         dcc.Dropdown(
+                                             id='y_value_dropdown',
+                                             options=[{"label": i, "value": i} for i in ['G1', 'G2', 'C (nT)', 'A (V)', 'Bx (nT)', 'By (nT)', 'Bz (nT)', 'Error_G1', 'Error_G2',
+                                                                                         'Error_C', 'Error_A', 'Error_Bx', 'Error_By', 'Error_Bz', 'MSE',
+                                                                                         'Laser Power (μW)', 'Laser Detuning (GHz)', 'Temperature (°C)', 'PP', 'V/nT', 'SE']],
+                                             value='Laser Detuning (GHz)',
+                                             style={'fontSize': 12}
                                          ), 
-                                         html.Div(
-                                             [
-                                                 dcc.Dropdown(
-                                                     id='y_value_dropdown',
-                                                     options=[{"label": i, "value": i} for i in ['G1', 'G2', 'C (nT)', 'A (V)', 'Bx (nT)', 'By (nT)', 'Bz (nT)', 'Error_G1', 'Error_G2',
-                                                                                                 'Error_C', 'Error_A', 'Error_Bx', 'Error_By', 'Error_Bz', 'MSE',
-                                                                                                 'Laser Power (μW)', 'Laser Detuning (GHz)', 'Temperature (°C)', 'PP', 'V/nT', 'SE']],
-                                                     value='',
-                                                     style=dict(width='60%',verticalAlign="middle"),
-                                                 html.P(': Y'),
-                                             ],
-                                             style=dict(display='flex')
-                                         ), 
-                                         html.Div(
-                                             [
-                                                 dcc.Dropdown(
-                                                     id='z_value_dropdown',
-                                                     options=[{"label": i, "value": i} for i in ['G1', 'G2', 'C (nT)', 'A (V)', 'Bx (nT)', 'By (nT)', 'Bz (nT)', 'Error_G1', 'Error_G2',
-                                                                                                 'Error_C', 'Error_A', 'Error_Bx', 'Error_By', 'Error_Bz', 'MSE',
-                                                                                                 'Laser Power (μW)', 'Laser Detuning (GHz)', 'Temperature (°C)', 'PP', 'V/nT', 'SE']],
-                                                     value='',
-                                                     style=dict(width='60%')),
-                                                 html.P(': Colour (optional)'),
-                                             ],
-                                             style=dict(display='flex')
-                                         ),
+                                         html.P('Colour (optional)'),
+                                         dcc.Dropdown(
+                                             id='z_value_dropdown',
+                                             options=[{"label": i, "value": i} for i in df.columns[0:21]],
+                                             value='',
+                                             style={'fontSize': 12}                                         ), 
                                          dcc.Graph(id='custom_plot',config={'displayModeBar': True}),
                                      ]
                                     )
@@ -271,6 +252,7 @@ app.layout = html.Div(children=[
           )
 ]
 )
+
 ## Call back for updating custom graph
 @app.callback(Output('custom_plot', 'figure'),
               Input('temp-range-slider', 'value'),
@@ -308,7 +290,6 @@ def update_figure(TEMP, LP, vnt, LD, PP, MSE,  data_version, x_value, y_value, z
 @app.callback(
    Output('hide_plotter_box', 'style'),
    [Input('value_dropdown_2', 'value')])
-
 def show_hide_element(visibility_state):
     if visibility_state == 'Plotter':
         return {'display': 'block'}
@@ -319,13 +300,12 @@ def show_hide_element(visibility_state):
 @app.callback(
    Output('hide_hanle_box', 'style'),
    [Input('value_dropdown_2', 'value')])
-
 def show_hide_element(visibility_state):
     if visibility_state == 'Hanle':
         return {'display': 'block'}
     if visibility_state == 'Plotter':
         return {'display': 'none'}
-
+    
 ## Callbacks for selected data details
 @app.callback(
   Output('Markdown_notes', 'children'),
@@ -383,6 +363,7 @@ def display_value(value):
   low = value[0]
   high = value[1]
   return 'Temperature = {} to {}°C'.format(low, high)
+
 ## Call back for lp slider indicator
 @app.callback(Output('LP_slider-drag-output', 'children'),
               [Input('LP-range-slider', 'value')])
@@ -390,6 +371,7 @@ def display_value(value):
   low = value[0]
   high = value[1]
   return 'Laser Power = {} to {}μW'.format(low, high)
+
 ## Call back for LD slider indicator
 @app.callback(Output('LD_slider-drag-output', 'children'),
               [Input('LD-range-slider', 'value')])
@@ -397,6 +379,7 @@ def display_value(value):
   low = value[0]
   high = value[1]
   return 'Laser Detuning = {} to {}GHz'.format(low, high)
+
 ## Call back for vnt slider indicator
 @app.callback(Output('vnt_slider-drag-output', 'children'),
               [Input('vnt-range-slider', 'value')])
@@ -404,16 +387,19 @@ def display_value(value):
   low = value[0]
   high = value[1]
   return 'V/nt = {} to {}'.format(low, high)
+
 ## Call back for PP slider indicator
 @app.callback(Output('PP_slider-drag-output', 'children'),
               [Input('PP-slider', 'value')])
 def display_value(value):
     return 'PP Value = {}'.format(value)
+
 ## Call back for MSE slider indicator
 @app.callback(Output('MSE_slider-drag-output', 'children'),
               [Input('MSE-slider', 'value')])
 def display_value(value):
     return 'MSE Value = {}'.format(value)
+
 ## Call back for updating the 3D graph
 @app.callback(Output('graph-with-slider', 'figure'),
               Input('temp-range-slider', 'value'),
@@ -443,7 +429,6 @@ def update_figure(TEMP, LP, vnt, LD, PP, MSE, col, data_version):
                     yaxis_title='Temperature (°C)',
                     zaxis_title='Laser Detuning (GHz)'))
   return fig
-
 
 ## Callback for table
 @app.callback(
