@@ -15,6 +15,9 @@ ALL_data_fit_values = pd.read_csv('https://raw.githubusercontent.com/rach6230/Da
 ALL_data_fit_values_v2 = pd.read_csv('https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Full_fit_Data_V2.csv')
 #V3
 ALL_data_fit_values_v3 = pd.read_csv('https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/M-LOOP/Full_fit_Data_V3.csv')
+#V4
+ALL_data_fit_values_v4 = pd.read_csv('https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/M-LOOP/Full_fit_Data_V4.csv')
+
 
 # Create col of A/C:
 ALL_data_fit_values["V/nT"] =  abs(ALL_data_fit_values['A'])/abs(ALL_data_fit_values['C'])
@@ -25,6 +28,9 @@ ALL_data_fit_values_v2["SE"] =  abs(ALL_data_fit_values_v2['G2'])-abs(ALL_data_f
 #V3
 ALL_data_fit_values_v3["V/nT"] =  abs(ALL_data_fit_values_v3['A'])/abs(ALL_data_fit_values_v3['C'])
 ALL_data_fit_values_v3["SE"] =  abs(ALL_data_fit_values_v3['G2'])-abs(ALL_data_fit_values_v3['G1'])
+#V3
+ALL_data_fit_values_v4["V/nT"] =  abs(ALL_data_fit_values_v4['A'])/abs(ALL_data_fit_values_v4['C'])
+ALL_data_fit_values_v4["SE"] =  abs(ALL_data_fit_values_v4['G2'])-abs(ALL_data_fit_values_v4['G1'])
 
 
 ## Load data for sliders
@@ -35,6 +41,8 @@ Github_urls_v1= pd.read_csv("https://raw.githubusercontent.com/rach6230/Dash_app
 Github_urls_v2 = pd.read_csv("https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Version_2_Data_1/Github_urls_sortedV2.csv")
 #v3
 Github_urls_v3 = pd.read_csv("https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/M-LOOP/Github_urls_sortedV3.csv")
+#v4
+Github_urls_v4 = pd.read_csv("https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/M-LOOP/Github_urls_sortedV4.csv")
 
 # Inital data to show (selected point)
 x = 14
@@ -88,6 +96,7 @@ app.layout = html.Div(children=[
                                 {'label': 'Systematic Testing V1', 'value': 'ST1'},
                                 {'label': 'Systematic Testing V2', 'value': 'ST2'},
                                 {'label': 'M-LOOP V1', 'value': 'ML1'},
+                                {'label': 'M-LOOP V2', 'value': 'ML2'},
                             ],
                             value='ST2'
                         ),     
@@ -183,7 +192,9 @@ def display_click_data(data_version):
   if data_version == 'ST1':
     df2 = ALL_data_fit_values
   if data_version == 'ML1':
-    df2 = ALL_data_fit_values_v3    
+    df2 = ALL_data_fit_values_v3 
+  if data_version == 'ML2':
+    df2 = ALL_data_fit_values_v4     
   if data_version == 'ST2':
     df2 = ALL_data_fit_values_v2  
   A = dcc.Slider(id='MSE-slider',
@@ -207,7 +218,9 @@ def display_click_data(data_version):
   if data_version == 'ST1':
     df2 = ALL_data_fit_values
   if data_version == 'ML1':
-    df2 = ALL_data_fit_values_v3    
+    df2 = ALL_data_fit_values_v3 
+  if data_version == 'ML2':
+    df2 = ALL_data_fit_values_v4        
   if data_version == 'ST2':
     df2 = ALL_data_fit_values_v2  
   A = dcc.Slider(id='PP-slider',
@@ -231,7 +244,9 @@ def display_click_data(data_version):
   if data_version == 'ST1':
     df2 = ALL_data_fit_values
   if data_version == 'ML1':
-    df2 = ALL_data_fit_values_v3    
+    df2 = ALL_data_fit_values_v3  
+  if data_version == 'ML2':
+    df2 = ALL_data_fit_values_v4        
   if data_version == 'ST2':
     df2 = ALL_data_fit_values_v2  
   A = dcc.RangeSlider(id='vnt-range-slider',
@@ -254,7 +269,9 @@ def display_click_data(data_version):
   if data_version == 'ST1':
     df2 = ALL_data_fit_values
   if data_version == 'ML1':
-    df2 = ALL_data_fit_values_v3    
+    df2 = ALL_data_fit_values_v3 
+  if data_version == 'ML2':
+    df2 = ALL_data_fit_values_v4        
   if data_version == 'ST2':
     df2 = ALL_data_fit_values_v2  
   A = dcc.RangeSlider(id = "temp-range-slider",
@@ -276,7 +293,9 @@ def display_click_data(data_version):
   if data_version == 'ST1':
     df2 = ALL_data_fit_values
   if data_version == 'ML1':
-    df2 = ALL_data_fit_values_v3    
+    df2 = ALL_data_fit_values_v3  
+  if data_version == 'ML2':
+    df2 = ALL_data_fit_values_v4        
   if data_version == 'ST2':
     df2 = ALL_data_fit_values_v2  
   A = dcc.RangeSlider(
@@ -300,7 +319,9 @@ def display_click_data(data_version):
   if data_version == 'ST1':
     df2 = ALL_data_fit_values
   if data_version == 'ML1':
-    df2 = ALL_data_fit_values_v3    
+    df2 = ALL_data_fit_values_v3 
+  if data_version == 'ML2':
+    df2 = ALL_data_fit_values_v4        
   if data_version == 'ST2':
     df2 = ALL_data_fit_values_v2  
   A = dcc.RangeSlider(id='LD-range-slider',
@@ -333,7 +354,9 @@ def update_figure(TEMP, LP, vnt, LD, PP, MSE,  data_version, x_value, y_value, z
   if data_version == 'ST1':
     df2 = ALL_data_fit_values
   if data_version == 'ML1':
-    df2 = ALL_data_fit_values_v3    
+    df2 = ALL_data_fit_values_v3   
+  if data_version == 'ML2':
+    df2 = ALL_data_fit_values_v4        
   if data_version == 'ST2':
     df2 = ALL_data_fit_values_v2     
   filtered_df = df2[(df2['PP']< PP)&(df2['MSE']< MSE)&
@@ -386,7 +409,7 @@ def display_click_data(data_version):
 * **Heaters**: 2x4.2 ohm thick film (magnetic)
 * **Cell**: Cs
 * **Notes**: Laser power not varying correctly during scans, all values taken at approx ~100uW'''
-  if data_version == 'ST2':
+  else:
     A = '''
 * **Testing type**: Systematic of all parameter space 
 * **Heater Driver**: MOSFET, 150kHz, square
@@ -394,14 +417,6 @@ def display_click_data(data_version):
 * **Heaters**: 2x4.2 ohm thick film (magnetic)
 * **Cell**: Cs
 * **Notes**: '''
-  if data_version == 'ML1':
-    A = '''
-* **Testing type**: M-LOOP for parameter space (Temp: 100-130C, Laser power: 350-800 uW, Laser detuning: 0-10 GHz)
-* **Heater Driver**: MOSFET, 150kHz, square
-* **Coil Drivers**: DAQ
-* **Heaters**: 2x4.2 ohm thick film (magnetic)
-* **Cell**: Cs
-* **Notes**: 45 loop (Potential 1.4 phase RF during data collection)'''
   return A
 
 ## Callback for selected data text ################
@@ -420,6 +435,8 @@ def update_figure(TEMP, LP, vnt, LD, PP, MSE, col, data_version):
     df2 = ALL_data_fit_values
   if data_version == 'ML1':
     df2 = ALL_data_fit_values_v3    
+  if data_version == 'ML2':
+    df2 = ALL_data_fit_values_v4        
   if data_version == 'ST2':
     df2 = ALL_data_fit_values_v2 
   filtered_df = df2[(df2['PP']< PP)&(df2['MSE']< MSE)&
@@ -439,7 +456,9 @@ def display_click_data(clickData, data_version):
   if data_version == 'ST1':
     df2 = ALL_data_fit_values
   if data_version == 'ML1':
-    df2 = ALL_data_fit_values_v3    
+    df2 = ALL_data_fit_values_v3   
+  if data_version == 'ML2':
+    df2 = ALL_data_fit_values_v4        
   if data_version == 'ST2':
     df2 = ALL_data_fit_values_v2 
   if clickData == None:
@@ -519,7 +538,9 @@ def update_figure(TEMP, LP, vnt, LD, PP, MSE, col, data_version):
   if data_version == 'ST1':
     df2 = ALL_data_fit_values
   if data_version == 'ML1':
-    df2 = ALL_data_fit_values_v3    
+    df2 = ALL_data_fit_values_v3   
+  if data_version == 'ML2':
+    df2 = ALL_data_fit_values_v4        
   if data_version == 'ST2':
     df2 = ALL_data_fit_values_v2 
   filtered_df = df2[(df2['PP']< PP)&(df2['MSE']< MSE)&
@@ -546,7 +567,9 @@ def on_trace_click(clickData, data_version):
     if data_version == 'ST1':
         df2 = ALL_data_fit_values
     if data_version == 'ML1':
-        df2 = ALL_data_fit_values_v3    
+        df2 = ALL_data_fit_values_v3   
+    if data_version == 'ML2':
+        df2 = ALL_data_fit_values_v4            
     if data_version == 'ST2':
         df2 = ALL_data_fit_values_v2 
     if clickData== None:
@@ -581,6 +604,8 @@ def on_trace_click(clickData, data_version):
         df2 = ALL_data_fit_values
     if data_version == 'ML1':
         df2 = ALL_data_fit_values_v3    
+    if data_version == 'ML2':
+        df2 = ALL_data_fit_values_v4        
     if data_version == 'ST2':
         df2 = ALL_data_fit_values_v2 
     if clickData== None:
@@ -616,7 +641,10 @@ def update_figure(clickData, data_version):
         Github_urls = Github_urls_v1
     if data_version == 'ML1':
         df2 = ALL_data_fit_values_v3 
-        Github_urls = Github_urls_v3           
+        Github_urls = Github_urls_v3 
+    if data_version == 'ML2':
+        df2 = ALL_data_fit_values_v4 
+        Github_urls = Github_urls_v4         
     if data_version == 'ST2':
         df2 = ALL_data_fit_values_v2 
         Github_urls = Github_urls_v2
@@ -670,7 +698,10 @@ def display_click_data(clickData2, clickData, data_version):
         Github_urls = Github_urls_v1
     if data_version == 'ML1':
         df2 = ALL_data_fit_values_v3 
-        Github_urls = Github_urls_v3           
+        Github_urls = Github_urls_v3  
+    if data_version == 'ML2':
+        df2 = ALL_data_fit_values_v4 
+        Github_urls = Github_urls_v4         
     if data_version == 'ST2':
         df2 = ALL_data_fit_values_v2 
         Github_urls = Github_urls_v2
@@ -726,7 +757,10 @@ def display_click_data(clickData2, clickData, data_version):
         Github_urls = Github_urls_v1
     if data_version == 'ML1':
         df2 = ALL_data_fit_values_v3 
-        Github_urls = Github_urls_v3           
+        Github_urls = Github_urls_v3   
+    if data_version == 'ML2':
+        df2 = ALL_data_fit_values_v4 
+        Github_urls = Github_urls_v4         
     if data_version == 'ST2':
         df2 = ALL_data_fit_values_v2 
         Github_urls = Github_urls_v2  
@@ -788,7 +822,10 @@ def display_click_data(clickData2, clickData, data_version):
         Github_urls = Github_urls_v1
     if data_version == 'ML1':
         df2 = ALL_data_fit_values_v3 
-        Github_urls = Github_urls_v3           
+        Github_urls = Github_urls_v3    
+    if data_version == 'ML2':
+        df2 = ALL_data_fit_values_v4 
+        Github_urls = Github_urls_v4         
     if data_version == 'ST2':
         df2 = ALL_data_fit_values_v2 
         Github_urls = Github_urls_v2       
@@ -837,6 +874,7 @@ def display_click_data(clickData2, clickData, data_version):
     fig.update_layout(height=150)
     fig.update_layout(font=dict(size=8)) # Change font size
     return fig
+
 
 if __name__ == '__main__':
     app.run_server()
