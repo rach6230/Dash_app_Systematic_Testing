@@ -13,13 +13,19 @@ tabtitle='SERF: Systematic Testing'
 ALL_data_fit_values = pd.read_csv('https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Full_fit_Data.csv')
 #V2
 ALL_data_fit_values_v2 = pd.read_csv('https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Full_fit_Data_V2.csv')
+#V3
+ALL_data_fit_values_v3 = pd.read_csv('https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/M-LOOP/Full_fit_Data_V3.csv')
 
-# Create col of A/C and SE:
+# Create col of A/C:
 ALL_data_fit_values["V/nT"] =  abs(ALL_data_fit_values['A'])/abs(ALL_data_fit_values['C'])
 ALL_data_fit_values["SE"] =  abs(ALL_data_fit_values['G2'])-abs(ALL_data_fit_values['G1'])
 #V2
 ALL_data_fit_values_v2["V/nT"] =  abs(ALL_data_fit_values_v2['A'])/abs(ALL_data_fit_values_v2['C'])
 ALL_data_fit_values_v2["SE"] =  abs(ALL_data_fit_values_v2['G2'])-abs(ALL_data_fit_values_v2['G1'])
+#V3
+ALL_data_fit_values_v3["V/nT"] =  abs(ALL_data_fit_values_v3['A'])/abs(ALL_data_fit_values_v3['C'])
+ALL_data_fit_values_v3["SE"] =  abs(ALL_data_fit_values_v3['G2'])-abs(ALL_data_fit_values_v3['G1'])
+
 
 ## Load data for sliders
 df = ALL_data_fit_values
@@ -27,31 +33,11 @@ df = ALL_data_fit_values
 Github_urls_v1= pd.read_csv("https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Data_pt2/Github_urls_sorted.csv")
 #v2
 Github_urls_v2 = pd.read_csv("https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/Version_2_Data_1/Github_urls_sortedV2.csv")
+#v3
+Github_urls_v3 = pd.read_csv("https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/M-LOOP/Github_urls_sortedV3.csv")
 
 # Inital data to show (selected point)
-x = 140
-
-# PP slider values
-if ALL_data_fit_values['PP'].max()>ALL_data_fit_values_v2['PP'].max():
-    S_MAX = ALL_data_fit_values['PP'].max()
-else:
-    S_MAX = ALL_data_fit_values_v2['PP'].max()
-if ALL_data_fit_values['PP'].min()<ALL_data_fit_values_v2['PP'].min():
-    S_MIN = ALL_data_fit_values['PP'].min()
-else:
-    S_MIN = ALL_data_fit_values_v2['PP'].min()
-S_STEP = (S_MIN+S_MAX)/1000
-
-## MSE slider values
-if ALL_data_fit_values['MSE'].max()>ALL_data_fit_values_v2['MSE'].max():
-    MSE_MAX = ALL_data_fit_values['MSE'].max()
-else:
-    MSE_MAX = ALL_data_fit_values_v2['MSE'].max()
-if ALL_data_fit_values['MSE'].min()<ALL_data_fit_values_v2['MSE'].min():
-    MSE_MIN = ALL_data_fit_values['MSE'].min()
-else:
-    MSE_MIN = ALL_data_fit_values_v2['MSE'].min()
-MSE_STEP = (MSE_MIN+MSE_MAX)/1000
+x = 14
 
 ## Colour values
 colors = {
@@ -75,89 +61,22 @@ app.layout = html.Div(children=[
                         html.H6('Filters'),
                         html.P('Parameter Range:'),
                         html.Div(id='TEMP_slider-drag-output', style={'margin-top': 20,'fontSize': 12}),
-                        dcc.RangeSlider(
-                          id='temp-range-slider',
-                          min=df['Temp'].min(),
-                          max=df['Temp'].max(),
-                          step=1,
-                          value=[df['Temp'].min(), df['Temp'].max()],
-                          marks={60: {'label': '60 °C', 'style': {'color': '#77b0b1'}},
-                                 80: {'label': '80 °C'},
-                                 100: {'label': '100 °C'},
-                                 120: {'label': '120°C', 'style': {'color': '#f50'}}
-                                }
-                        ),
+                        html.Div(id = 'Temp_slider_container'),
                         html.Div(id='LP_slider-drag-output', style={'margin-top': 20,'fontSize': 12}),
-                        dcc.RangeSlider(
-                          id='LP-range-slider',
-                          min=df['Laser_Power'].min(),
-                          max=df['Laser_Power'].max(),
-                          step=1,
-                          value=[df['Laser_Power'].min(), df['Laser_Power'].max()],
-                          marks={70: {'label': '70', 'style': {'color': '#77b0b1'}},
-                                 140: {'label': '140'},
-                                 210: {'label': '210'},
-                                 280: {'label': '280'},
-                                 350: {'label': '350', 'style': {'color': '#f50'}}
-                                }
-                        ),
+                        html.Div(id = 'LP_slider_container'),
                         html.Div(id='LD_slider-drag-output', style={'margin-top': 20,'fontSize': 12}),
-                        dcc.RangeSlider(id='LD-range-slider',
-                                        min=-35,
-                                        max=(df['Laser_Detuning'].max())+1,
-                                        step=1,
-                                        value=[df['Laser_Detuning'].min(), 15],
-                                        marks={
-                                          -35: {'label': '-35', 'style': {'color': '#77b0b1'}},
-                                          -22.5: {'label': '-22.5'},
-                                          -10: {'label': '-10'},
-                                          2.5: {'label': '2.5'},
-                                          15: {'label': '15', 'style': {'color': '#f50'}}
-                                        }
-                                       ),
+                        html.Div(id = 'LD_slider_container'),
                         html.Div(id='vnt_slider-drag-output', style={'margin-top': 20,'fontSize': 12}),
-                        dcc.RangeSlider(id='vnt-range-slider',
-                                        min=df['V/nT'].min(),
-                                        max=df['V/nT'].max(),
-                                        step=1,
-                                        value=[df['V/nT'].min(), df['V/nT'].max()],
-                                        marks={
-                                          df['V/nT'].min(): {'label': 'Min', 'style': {'color': '#77b0b1'}},
-                                          df['V/nT'].max(): {'label': 'Max', 'style': {'color': '#f50'}}
-                                        }
-                                       ),
-                          html.Br(), #new line
-                          html.P('Error:'),
-                          html.Div(id='PP_slider-drag-output', style={'margin-top': 20,'fontSize': 12}),
-                          dcc.Slider(id='PP-slider',
-                                     min=S_MIN,
-                                     max=S_MAX,
-                                     step=S_STEP,
-                                     value=S_MAX,
-                                     marks={S_MIN: {'label': '0 %', 'style': {'color': '#77b0b1'}},
-                                            S_MAX*0.25: {'label': '25 %'},
-                                            S_MAX*0.5: {'label': '50 %'},
-                                            S_MAX*0.75: {'label': '75 %'},
-                                            S_MAX: {'label': '100%', 'style': {'color': '#f50'}}
-                                           }
-                                    ),
-                          html.Div(id='MSE_slider-drag-output', style={'margin-top': 20,'fontSize': 12}),
-                          dcc.Slider(id='MSE-slider',
-                                     min=MSE_MIN,
-                                     max=MSE_MAX,
-                                     step=MSE_STEP,
-                                     value=MSE_MAX,
-                                     marks={
-                                         0: {'label': '0 °C', 'style': {'color': '#77b0b1'}},
-                                         MSE_MAX*0.25: {'label': '25 %'},
-                                         MSE_MAX*0.5: {'label': '50 %'},
-                                         MSE_MAX*0.75: {'label': '75 %'},
-                                         MSE_MAX: {'label': '100%', 'style': {'color': '#f50'}}
-                                     }
-                                    ),
-                          html.Br(), #new line
-                          html.P('Data Set Details:'),
-                          dcc.Markdown(id='Markdown_notes', style={'fontSize': 12}),
+                        html.Div(id = 'vnt_slider_container'),  
+                        html.Br(), #new line
+                        html.P('Error:'),
+                        html.Div(id='PP_slider-drag-output', style={'margin-top': 20,'fontSize': 12}),
+                        html.Div(id = 'PP_slider_container'),
+                        html.Div(id='MSE_slider-drag-output', style={'margin-top': 20,'fontSize': 12}),
+                        html.Div(id = 'MSE_slider_container'), 
+                        html.Br(), #new line
+                        html.P('Data Set Details:'),
+                        dcc.Markdown(id='Markdown_notes', style={'fontSize': 12}),
                       ]
                      ),  # Define the 1st column
              html.Div(className='five columns div-for-charts',
@@ -168,6 +87,7 @@ app.layout = html.Div(children=[
                             options=[
                                 {'label': 'Systematic Testing V1', 'value': 'ST1'},
                                 {'label': 'Systematic Testing V2', 'value': 'ST2'},
+                                {'label': 'M-LOOP V1', 'value': 'ML1'},
                             ],
                             value='ST2'
                         ),     
@@ -181,6 +101,7 @@ app.layout = html.Div(children=[
                         ),                            
                         dcc.Graph(id='graph-with-slider',config={'displayModeBar': False}),
                         html.Br(), #new line
+                        html.Div(id='totalpoints', style={'fontSize': 12}),  
                         html.H6('Single Parameter Space Point Data'),
                         html.Div(id='click-data', style={'fontSize': 12}),
                         html.P('Fit Values'),
@@ -255,7 +176,148 @@ app.layout = html.Div(children=[
 ]
 )
 
-## Call back for updating custom graph
+############ Callbacks for slider containers #############################
+@app.callback(Output('MSE_slider_container', 'children'),
+              Input('segselect', 'value'))
+def display_click_data(data_version):
+  if data_version == 'ST1':
+    df2 = ALL_data_fit_values
+  if data_version == 'ML1':
+    df2 = ALL_data_fit_values_v3    
+  if data_version == 'ST2':
+    df2 = ALL_data_fit_values_v2  
+  A = dcc.Slider(id='MSE-slider',
+                 min=df2['MSE'].min(),
+                 max=df2['MSE'].max()+(df2['MSE'].max()*0.01),
+                 step=(df2['MSE'].max()+df2['MSE'].min())/100000,
+                 value=df2['MSE'].max()+(df2['MSE'].max()*0.01),
+                 marks={
+                     0: {'label': '0 °C', 'style': {'color': '#77b0b1'}},
+                     df2['MSE'].max()*0.25: {'label': '25 %'},
+                     df2['MSE'].max()*0.5: {'label': '50 %'},
+                     df2['MSE'].max()*0.75: {'label': '75 %'},
+                     df2['MSE'].max(): {'label': '100%', 'style': {'color': '#f50'}}
+                 }
+                )
+  return A
+
+@app.callback(Output('PP_slider_container', 'children'),
+              Input('segselect', 'value'))
+def display_click_data(data_version):
+  if data_version == 'ST1':
+    df2 = ALL_data_fit_values
+  if data_version == 'ML1':
+    df2 = ALL_data_fit_values_v3    
+  if data_version == 'ST2':
+    df2 = ALL_data_fit_values_v2  
+  A = dcc.Slider(id='PP-slider',
+                 min=df2['PP'].min(),
+                 max=df2['PP'].max()+(df2['PP'].max()*0.01),
+                 step=(df2['PP'].max()+df2['PP'].min())/100000,
+                 value=df2['PP'].max()+(df2['PP'].max()*0.01),
+                 marks={df2['PP'].min(): {'label': '0 %', 'style': {'color': '#77b0b1'}},
+                        df2['PP'].max()*0.25: {'label': '25 %'},
+                        df2['PP'].max()*0.5: {'label': '50 %'},
+                        df2['PP'].max()*0.75: {'label': '75 %'},
+                        df2['PP'].max(): {'label': '100%', 'style': {'color': '#f50'}}
+                       }
+                )
+  return A
+
+
+@app.callback(Output('vnt_slider_container', 'children'),
+              Input('segselect', 'value'))
+def display_click_data(data_version):
+  if data_version == 'ST1':
+    df2 = ALL_data_fit_values
+  if data_version == 'ML1':
+    df2 = ALL_data_fit_values_v3    
+  if data_version == 'ST2':
+    df2 = ALL_data_fit_values_v2  
+  A = dcc.RangeSlider(id='vnt-range-slider',
+                      min=df2['V/nT'].min(),
+                      max=df2['V/nT'].max()+(df2['V/nT'].max()*0.01),
+                      step=1/100000,
+                      value=[df2['V/nT'].min(), df2['V/nT'].max()+(df2['V/nT'].max()*0.01)],
+                      marks={df2['V/nT'].min(): {'label': '0 %', 'style': {'color': '#77b0b1'}},
+                             df2['V/nT'].max()*0.25: {'label': '25 %'},
+                             df2['V/nT'].max()*0.5: {'label': '50 %'},
+                             df2['V/nT'].max()*0.75: {'label': '75 %'},
+                             df2['V/nT'].max(): {'label': '100%', 'style': {'color': '#f50'}}
+                            }
+                     )
+  return A
+
+@app.callback(Output('Temp_slider_container', 'children'),
+              Input('segselect', 'value'))
+def display_click_data(data_version):
+  if data_version == 'ST1':
+    df2 = ALL_data_fit_values
+  if data_version == 'ML1':
+    df2 = ALL_data_fit_values_v3    
+  if data_version == 'ST2':
+    df2 = ALL_data_fit_values_v2  
+  A = dcc.RangeSlider(id = "temp-range-slider",
+                      min=df2['Temp'].min(),
+                  max=df2['Temp'].max()+(df2['Temp'].max()*0.01),
+                  step=1/100000,
+                  value=[df2['Temp'].min(), df2['Temp'].max()+(df2['Temp'].max()*0.01)],
+                  marks={60: {'label': '60 °C', 'style': {'color': '#77b0b1'}},
+                         80: {'label': '80 °C'},
+                         100: {'label': '100 °C'},
+                         120: {'label': '120°C', 'style': {'color': '#f50'}}
+                        }
+                 )
+  return A
+
+@app.callback(Output('LP_slider_container', 'children'),
+              Input('segselect', 'value'))
+def display_click_data(data_version):
+  if data_version == 'ST1':
+    df2 = ALL_data_fit_values
+  if data_version == 'ML1':
+    df2 = ALL_data_fit_values_v3    
+  if data_version == 'ST2':
+    df2 = ALL_data_fit_values_v2  
+  A = dcc.RangeSlider(
+                          id='LP-range-slider',
+                          min=df2['Laser_Power'].min(),
+                          max=df2['Laser_Power'].max()+1,
+                          step=1/100000,
+                          value=[df2['Laser_Power'].min(), df2['Laser_Power'].max()+1],
+                          marks={70: {'label': '70', 'style': {'color': '#77b0b1'}},
+                                 140: {'label': '140'},
+                                 210: {'label': '210'},
+                                 280: {'label': '280'},
+                                 350: {'label': '350', 'style': {'color': '#f50'}}
+                                }
+                        )
+  return A
+
+@app.callback(Output('LD_slider_container', 'children'),
+              Input('segselect', 'value'))
+def display_click_data(data_version):
+  if data_version == 'ST1':
+    df2 = ALL_data_fit_values
+  if data_version == 'ML1':
+    df2 = ALL_data_fit_values_v3    
+  if data_version == 'ST2':
+    df2 = ALL_data_fit_values_v2  
+  A = dcc.RangeSlider(id='LD-range-slider',
+                      min=df2['Laser_Detuning'].min(),
+                      max=df2['Laser_Detuning'].max()+1,
+                      step=1/100000,
+                      value=[df2['Laser_Detuning'].min(), df2['Laser_Detuning'].max()+1],
+                      marks={
+                          -35: {'label': '-35', 'style': {'color': '#77b0b1'}},
+                          -22.5: {'label': '-22.5'},
+                          -10: {'label': '-10'},
+                          2.5: {'label': '2.5'},
+                          15: {'label': '15', 'style': {'color': '#f50'}}
+                      }
+                     )
+  return A
+######## Call back for updating custom graph ###############################################
 @app.callback(Output('custom_plot', 'figure'),
               Input('temp-range-slider', 'value'),
               Input('LP-range-slider', 'value'),
@@ -270,8 +332,10 @@ app.layout = html.Div(children=[
 def update_figure(TEMP, LP, vnt, LD, PP, MSE,  data_version, x_value, y_value, z_value):
   if data_version == 'ST1':
     df2 = ALL_data_fit_values
-  else:
-    df2 = ALL_data_fit_values_v2    
+  if data_version == 'ML1':
+    df2 = ALL_data_fit_values_v3    
+  if data_version == 'ST2':
+    df2 = ALL_data_fit_values_v2     
   filtered_df = df2[(df2['PP']< PP)&(df2['MSE']< MSE)&
                     (df2['Temp']<= TEMP[1])&(df2['Temp']>= TEMP[0])&
                     (df2['Laser_Power']<= LP[1])&(df2['Laser_Power']>= LP[0])&
@@ -288,6 +352,7 @@ def update_figure(TEMP, LP, vnt, LD, PP, MSE,  data_version, x_value, y_value, z
   fig.update_layout(height=300)  
   return fig
 
+######## Call backs for the plotter and hanle options ################
 ## Callback for hiding plotter
 @app.callback(
    Output('hide_plotter_box', 'style'),
@@ -308,7 +373,7 @@ def show_hide_element(visibility_state):
     if visibility_state == 'Plotter':
         return {'display': 'none'}
     
-## Callbacks for selected data details
+################# Callbacks for selected data details  ############################
 @app.callback(
   Output('Markdown_notes', 'children'),
   Input('segselect', 'value'))
@@ -331,7 +396,33 @@ def display_click_data(data_version):
 * **Notes**: '''
   return A
 
-## Callback for selected data text
+## Callback for selected data text ################
+## Call back for text under graph
+@app.callback(Output('totalpoints', 'children'),
+              Input('temp-range-slider', 'value'),
+              Input('LP-range-slider', 'value'),
+              Input('vnt-range-slider', 'value'),
+              Input('LD-range-slider', 'value'),
+              Input('PP-slider', 'value'),
+              Input('MSE-slider', 'value'),
+              Input('value_dropdown', 'value'),
+              Input('segselect', 'value'))
+def update_figure(TEMP, LP, vnt, LD, PP, MSE, col, data_version):
+  if data_version == 'ST1':
+    df2 = ALL_data_fit_values
+  if data_version == 'ML1':
+    df2 = ALL_data_fit_values_v3    
+  if data_version == 'ST2':
+    df2 = ALL_data_fit_values_v2 
+  filtered_df = df2[(df2['PP']< PP)&(df2['MSE']< MSE)&
+                    (df2['Temp']<= TEMP[1])&(df2['Temp']>= TEMP[0])&
+                    (df2['Laser_Power']<= LP[1])&(df2['Laser_Power']>= LP[0])&
+                    (df2['V/nT']<= vnt[1])&(df2['V/nT']>= vnt[0])&
+                    (df2['Laser_Detuning']<= LD[1])&(df2['Laser_Detuning']>= LD[0])]
+  length = len(filtered_df['PP'])
+  return 'Total points =  {}'.format(length)
+
+
 @app.callback(
   Output('click-data', 'children'),
   Input('graph-with-slider', 'clickData'),
@@ -339,10 +430,12 @@ def display_click_data(data_version):
 def display_click_data(clickData, data_version):
   if data_version == 'ST1':
     df2 = ALL_data_fit_values
-  else:
-    df2 = ALL_data_fit_values_v2
+  if data_version == 'ML1':
+    df2 = ALL_data_fit_values_v3    
+  if data_version == 'ST2':
+    df2 = ALL_data_fit_values_v2 
   if clickData == None:
-    x = 140
+    x = 14
     line = df2.iloc[x,] 
     lp = line[15]
     ld = line[16]
@@ -357,6 +450,7 @@ def display_click_data(clickData, data_version):
     A = 'Temperature ={}°C, Laser Power = {}μW, Laser Detuning = {}GHz, V/nT = {}'.format(temp, lp, ld, vnt)
   return A
 
+########### Call backs for Slider indicators ##########################################################
 ## Call back for TEMP slider indicator
 @app.callback(Output('TEMP_slider-drag-output', 'children'),
               [Input('temp-range-slider', 'value')]
@@ -402,6 +496,7 @@ def display_value(value):
 def display_value(value):
     return 'MSE Value = {}'.format(value)
 
+############### Call back for graphs #################################
 ## Call back for updating the 3D graph
 @app.callback(Output('graph-with-slider', 'figure'),
               Input('temp-range-slider', 'value'),
@@ -415,8 +510,10 @@ def display_value(value):
 def update_figure(TEMP, LP, vnt, LD, PP, MSE, col, data_version):
   if data_version == 'ST1':
     df2 = ALL_data_fit_values
-  else:
-    df2 = ALL_data_fit_values_v2    
+  if data_version == 'ML1':
+    df2 = ALL_data_fit_values_v3    
+  if data_version == 'ST2':
+    df2 = ALL_data_fit_values_v2 
   filtered_df = df2[(df2['PP']< PP)&(df2['MSE']< MSE)&
                     (df2['Temp']<= TEMP[1])&(df2['Temp']>= TEMP[0])&
                     (df2['Laser_Power']<= LP[1])&(df2['Laser_Power']>= LP[0])&
@@ -440,10 +537,12 @@ def update_figure(TEMP, LP, vnt, LD, PP, MSE, col, data_version):
 def on_trace_click(clickData, data_version):
     if data_version == 'ST1':
         df2 = ALL_data_fit_values
-    else:
-        df2 = ALL_data_fit_values_v2
+    if data_version == 'ML1':
+        df2 = ALL_data_fit_values_v3    
+    if data_version == 'ST2':
+        df2 = ALL_data_fit_values_v2 
     if clickData== None:
-        x = 140
+        x = 14
         line = df2.iloc[x,] 
         lp = line[15]
         ld = line[16]
@@ -472,10 +571,12 @@ def on_trace_click(clickData, data_version):
 def on_trace_click(clickData, data_version):
     if data_version == 'ST1':
         df2 = ALL_data_fit_values
-    else:
-        df2 = ALL_data_fit_values_v2
+    if data_version == 'ML1':
+        df2 = ALL_data_fit_values_v3    
+    if data_version == 'ST2':
+        df2 = ALL_data_fit_values_v2 
     if clickData== None:
-        x = 140
+        x = 14
         line = df2.iloc[x,] 
         lp = line[15]
         ld = line[16]
@@ -505,11 +606,14 @@ def update_figure(clickData, data_version):
     if data_version == 'ST1':
         df2 = ALL_data_fit_values
         Github_urls = Github_urls_v1
-    else:
+    if data_version == 'ML1':
+        df2 = ALL_data_fit_values_v3 
+        Github_urls = Github_urls_v3           
+    if data_version == 'ST2':
         df2 = ALL_data_fit_values_v2 
         Github_urls = Github_urls_v2
     if clickData == None:
-        x = 140
+        x = 14
         line = df2.iloc[x,] 
         lp = line[15]
         ld = line[16]
@@ -556,11 +660,14 @@ def display_click_data(clickData2, clickData, data_version):
     if data_version == 'ST1':
         df2 = ALL_data_fit_values
         Github_urls = Github_urls_v1
-    else:
+    if data_version == 'ML1':
+        df2 = ALL_data_fit_values_v3 
+        Github_urls = Github_urls_v3           
+    if data_version == 'ST2':
         df2 = ALL_data_fit_values_v2 
-        Github_urls = Github_urls_v2  
+        Github_urls = Github_urls_v2
     if clickData == None:
-        x = 140
+        x = 14
         line = df2.iloc[x,]
         lp = line[15]
         ld = line[16]
@@ -609,11 +716,14 @@ def display_click_data(clickData2, clickData, data_version):
     if data_version == 'ST1':
         df2 = ALL_data_fit_values
         Github_urls = Github_urls_v1
-    else:
+    if data_version == 'ML1':
+        df2 = ALL_data_fit_values_v3 
+        Github_urls = Github_urls_v3           
+    if data_version == 'ST2':
         df2 = ALL_data_fit_values_v2 
-        Github_urls = Github_urls_v2      
+        Github_urls = Github_urls_v2  
     if clickData == None:
-        x = 140
+        x = 14
         line = df2.iloc[x,]
         lp = line[15]
         ld = line[16]
@@ -668,11 +778,14 @@ def display_click_data(clickData2, clickData, data_version):
     if data_version == 'ST1':
         df2 = ALL_data_fit_values
         Github_urls = Github_urls_v1
-    else:
+    if data_version == 'ML1':
+        df2 = ALL_data_fit_values_v3 
+        Github_urls = Github_urls_v3           
+    if data_version == 'ST2':
         df2 = ALL_data_fit_values_v2 
-        Github_urls = Github_urls_v2        
+        Github_urls = Github_urls_v2       
     if clickData == None:
-        x = 140
+        x = 14
         line = df2.iloc[x,]
         lp = line[15]
         ld = line[16]
