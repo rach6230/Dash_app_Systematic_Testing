@@ -409,6 +409,22 @@ def display_click_data(data_version):
 * **Heaters**: 2x4.2 ohm thick film (magnetic)
 * **Cell**: Cs
 * **Notes**: Laser power not varying correctly during scans, all values taken at approx ~100uW'''
+  if data_version == 'ML1':  
+    A = '''
+* **Testing type**: M-LOOP for parameter space (Temp: 100-130C, Laser power: 350-800 μW, Laser detuning: 0-10 GHz)
+* **Heater Driver**: MOSFET, 150kHz, square
+* **Coil Drivers**: DAQ
+* **Heaters**: 2x4.2 ohm thick film (magnetic)
+* **Cell**: Cs
+* **Notes**: 45 loop (Potential 1.4 phase RF during data collection)'''
+  if data_version == 'ML2':  
+    A = '''
+* **Testing type**: M-LOOP for parameter space (Temp: 100-130C, Laser power: 350-800 μW, Laser detuning: 0-10 GHz)
+* **Heater Driver**: MOSFET, 150kHz, square
+* **Coil Drivers**: DAQ
+* **Heaters**: 2x4.2 ohm thick film (magnetic)
+* **Cell**: Cs
+* **Notes**: 400 loop'''
   else:
     A = '''
 * **Testing type**: Systematic of all parameter space 
