@@ -20,16 +20,16 @@ ALL_data_fit_values_v4 = pd.read_csv('https://raw.githubusercontent.com/rach6230
 
 
 # Create col of A/C:
-ALL_data_fit_values["V/nT"] =  abs(ALL_data_fit_values['A'])/abs(ALL_data_fit_values['C'])
+ALL_data_fit_values["V/nT"] =  abs(ALL_data_fit_values['G2'])/abs(ALL_data_fit_values['A'])
 ALL_data_fit_values["SE"] =  abs(ALL_data_fit_values['G2'])-abs(ALL_data_fit_values['G1'])
 #V2
-ALL_data_fit_values_v2["V/nT"] =  abs(ALL_data_fit_values_v2['A'])/abs(ALL_data_fit_values_v2['C'])
+ALL_data_fit_values_v2["V/nT"] =  abs(ALL_data_fit_values_v2['G2'])/abs(ALL_data_fit_values_v2['A'])
 ALL_data_fit_values_v2["SE"] =  abs(ALL_data_fit_values_v2['G2'])-abs(ALL_data_fit_values_v2['G1'])
 #V3
-ALL_data_fit_values_v3["V/nT"] =  abs(ALL_data_fit_values_v3['A'])/abs(ALL_data_fit_values_v3['C'])
+ALL_data_fit_values_v3["V/nT"] =  abs(ALL_data_fit_values_v3['G2'])/abs(ALL_data_fit_values_v3['A'])
 ALL_data_fit_values_v3["SE"] =  abs(ALL_data_fit_values_v3['G2'])-abs(ALL_data_fit_values_v3['G1'])
 #V3
-ALL_data_fit_values_v4["V/nT"] =  abs(ALL_data_fit_values_v4['A'])/abs(ALL_data_fit_values_v4['C'])
+ALL_data_fit_values_v4["V/nT"] =  abs(ALL_data_fit_values_v4['G2'])/abs(ALL_data_fit_values_v4['A'])
 ALL_data_fit_values_v4["SE"] =  abs(ALL_data_fit_values_v4['G2'])-abs(ALL_data_fit_values_v4['G1'])
 
 
