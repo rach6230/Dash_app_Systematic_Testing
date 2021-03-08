@@ -93,12 +93,10 @@ app.layout = html.Div(children=[
                         dcc.Dropdown(
                             id='segselect',
                             options=[
-                                {'label': 'V1: Systematic Testing V1', 'value': 'ST1'},
-                                {'label': 'V1: Systematic Testing V2', 'value': 'ST2'},
-                                {'label': 'V1: M-LOOP V1', 'value': 'ML1'},
-                                {'label': 'V1: M-LOOP V2', 'value': 'ML2'},
-                                {'label': 'V2: M-LOOP V1', 'value': 'ML3'},
-                                {'label': 'V2: GA V1', 'value': 'GA1'},
+                                {'label': 'Systematic Testing V1', 'value': 'ST1'},
+                                {'label': 'Systematic Testing V2', 'value': 'ST2'},
+                                {'label': 'M-LOOP V1', 'value': 'ML1'},
+                                {'label': 'M-LOOP V2', 'value': 'ML2'},
                             ],
                             value='ST2'
                         ),     
@@ -416,7 +414,7 @@ def display_click_data(data_version):
 * **Testing type**: M-LOOP for parameter space (Temp: 100-130C, Laser power: 350-800 μW, Laser detuning: 0-10 GHz)
 * **Heater Driver**: MOSFET, 150kHz, square
 * **Coil Drivers**: DAQ
-* **Heaters**: 2 x 4.2 ohm thick film (magnetic)
+* **Heaters**: 2x4.2 ohm thick film (magnetic)
 * **Cell**: Cs
 * **Notes**: 45 loop (Potential 1.4 phase RF during data collection)'''
   if data_version == 'ML2':  
@@ -424,33 +422,17 @@ def display_click_data(data_version):
 * **Testing type**: M-LOOP for parameter space (Temp: 100-130C, Laser power: 350-800 μW, Laser detuning: 0-10 GHz)
 * **Heater Driver**: MOSFET, 150kHz, square
 * **Coil Drivers**: DAQ
-* **Heaters**: 2 x 4.2 ohm thick film (magnetic)
+* **Heaters**: 2x4.2 ohm thick film (magnetic)
 * **Cell**: Cs
 * **Notes**: 400 loop'''
-  if data_version == 'ST2':
+  else:
     A = '''
 * **Testing type**: Systematic of all parameter space 
 * **Heater Driver**: MOSFET, 150kHz, square
 * **Coil Drivers**: DAQ
-* **Heaters**: 2 x 4.2 ohm thick film (magnetic)
+* **Heaters**: 2x4.2 ohm thick film (magnetic)
 * **Cell**: Cs
 * **Notes**: '''
-  if data_version == 'ML3':  
-    A = '''
-* **Testing type**: M-LOOP for parameter space (Temp: 60-125C, Laser power: 150-800 μW, Laser detuning: -20 - 10 GHz)
-* **Heater Driver**: MOSFET, 150kHz, square
-* **Coil Drivers**: DAQ
-* **Heaters**: 1 x 8 ohm Non-magnetic
-* **Cell**: Cs
-* **Notes**: 166 loop'''
-      if data_version == 'GA1':  
-    A = '''
-* **Testing type**: Genetic Algorithm for parameter space (Temp: 60-120C, Laser power: 200-700 μW, Laser detuning: -10 - 10 GHz)
-* **Heater Driver**: MOSFET, 150kHz, square
-* **Coil Drivers**: DAQ
-* **Heaters**: 1 x 8 ohm Non-magnetic
-* **Cell**: Cs
-* **Notes**: 166 loop'''
   return A
 
 ## Callback for selected data text ################
