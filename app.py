@@ -96,7 +96,7 @@ app.layout = html.Div(children=[
                         dcc.Dropdown(
                             id='segselect',
                             options=[
-                                {'label': 'Systematic Testing (25-01-21)', 'value': 'ST1'},
+                                {'label': 'Systematic Testing (1736 sample, 25-01-21)', 'value': 'ST1'},
                                 {'label': 'Systematic Testing (1728 Sample, 03-02-21)', 'value': 'ST2'},
                                 {'label': 'M-LOOP (45 Loop, 20-02-21)', 'value': 'ML1'},
                                 {'label': 'M-LOOP (500 Loop, 22-02-21)', 'value': 'ML2'},
