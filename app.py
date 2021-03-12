@@ -17,10 +17,6 @@ ALL_data_fit_values_v2 = pd.read_csv('https://raw.githubusercontent.com/rach6230
 ALL_data_fit_values_v3 = pd.read_csv('https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/M-LOOP/Full_fit_Data_V3.csv')
 #V4
 ALL_data_fit_values_v4 = pd.read_csv('https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/M-LOOP/Full_fit_Data_V4.csv')
-#V5
-ALL_data_fit_values_v5 = pd.read_csv('https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/M-LOOP/Full_fit_Data_V5.csv')
-#V6
-ALL_data_fit_values_v6 = pd.read_csv('https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/GA/Full_fit_Data_V6.csv')
 
 
 # Create col of A/C:
@@ -35,12 +31,7 @@ ALL_data_fit_values_v3["SE"] =  abs(ALL_data_fit_values_v3['G2'])-abs(ALL_data_f
 #V4
 ALL_data_fit_values_v4["V/nT"] =  abs(ALL_data_fit_values_v4['A'])/abs(ALL_data_fit_values_v4['G2'])
 ALL_data_fit_values_v4["SE"] =  abs(ALL_data_fit_values_v4['G2'])-abs(ALL_data_fit_values_v4['G1'])
-#V5
-ALL_data_fit_values_v5["V/nT"] =  abs(ALL_data_fit_values_v5['A'])/abs(ALL_data_fit_values_v5['G2'])
-ALL_data_fit_values_v5["SE"] =  abs(ALL_data_fit_values_v5['G2'])-abs(ALL_data_fit_values_v5['G1'])
-#V6
-ALL_data_fit_values_v6["V/nT"] =  abs(ALL_data_fit_values_v6['A'])/abs(ALL_data_fit_values_v6['G2'])
-ALL_data_fit_values_v6["SE"] =  abs(ALL_data_fit_values_v6['G2'])-abs(ALL_data_fit_values_v6['G1'])
+
 
 ## Load data for sliders
 df = ALL_data_fit_values
@@ -52,10 +43,7 @@ Github_urls_v2 = pd.read_csv("https://raw.githubusercontent.com/rach6230/Dash_ap
 Github_urls_v3 = pd.read_csv("https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/M-LOOP/Github_urls_sortedV3.csv")
 #v4
 Github_urls_v4 = pd.read_csv("https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/M-LOOP/Github_urls_sortedV4.csv")
-#v5
-Github_urls_v5 = pd.read_csv("https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/M-LOOP/Github_urls_sortedV5.csv")
-#v6
-Github_urls_v6 = pd.read_csv("https://raw.githubusercontent.com/rach6230/Dash_app_Systematic_Testing/main/GA/Github_urls_sortedV6.csv")
+
 
 # Inital data to show (selected point)
 x = 14
@@ -104,16 +92,14 @@ app.layout = html.Div(children=[
                      ),  # Define the 1st column
              html.Div(className='five columns div-for-charts',
                       children = [
-                        html.H6('All Parameter Space Data'),
+                        html.H6('Version 1: All Parameter Space Data'),
                         dcc.Dropdown(
                             id='segselect',
                             options=[
-                                {'label': 'V1: Systematic Testing V1', 'value': 'ST1'},
-                                {'label': 'V1: Systematic Testing V2', 'value': 'ST2'},
-                                {'label': 'V1: M-LOOP V1', 'value': 'ML1'},
-                                {'label': 'V1: M-LOOP V2', 'value': 'ML2'},
-                                {'label': 'V2: M-LOOP V1', 'value': 'ML3'},
-                                {'label': 'V2: GA V1', 'value': 'GA1'},
+                                {'label': 'Systematic Testing (25-01-21)', 'value': 'ST1'},
+                                {'label': 'Systematic Testing (1728 Sample, 03-02-21)', 'value': 'ST2'},
+                                {'label': 'M-LOOP (45 Loop, 20-02-21)', 'value': 'ML1'},
+                                {'label': 'M-LOOP (500 Loop, 22-02-21)', 'value': 'ML2'},
                             ],
                             value='ST2'
                         ),     
@@ -211,11 +197,7 @@ def display_click_data(data_version):
   if data_version == 'ML1':
     df2 = ALL_data_fit_values_v3 
   if data_version == 'ML2':
-    df2 = ALL_data_fit_values_v4
-  if data_version == 'ML3':
-    df2 = ALL_data_fit_values_v5    
-  if data_version == 'GA1':
-    df2 = ALL_data_fit_values_v6    
+    df2 = ALL_data_fit_values_v4   
   if data_version == 'ST2':
     df2 = ALL_data_fit_values_v2  
   A = dcc.Slider(id='MSE-slider',
@@ -241,11 +223,7 @@ def display_click_data(data_version):
   if data_version == 'ML1':
     df2 = ALL_data_fit_values_v3 
   if data_version == 'ML2':
-    df2 = ALL_data_fit_values_v4 
-  if data_version == 'ML3':
-    df2 = ALL_data_fit_values_v5  
-  if data_version == 'GA1':
-    df2 = ALL_data_fit_values_v6       
+    df2 = ALL_data_fit_values_v4       
   if data_version == 'ST2':
     df2 = ALL_data_fit_values_v2  
   A = dcc.Slider(id='PP-slider',
@@ -271,11 +249,7 @@ def display_click_data(data_version):
   if data_version == 'ML1':
     df2 = ALL_data_fit_values_v3  
   if data_version == 'ML2':
-    df2 = ALL_data_fit_values_v4   
-  if data_version == 'ML3':
-    df2 = ALL_data_fit_values_v5    
-  if data_version == 'GA1':
-    df2 = ALL_data_fit_values_v6       
+    df2 = ALL_data_fit_values_v4         
   if data_version == 'ST2':
     df2 = ALL_data_fit_values_v2  
   A = dcc.RangeSlider(id='vnt-range-slider',
@@ -300,11 +274,7 @@ def display_click_data(data_version):
   if data_version == 'ML1':
     df2 = ALL_data_fit_values_v3 
   if data_version == 'ML2':
-    df2 = ALL_data_fit_values_v4 
-  if data_version == 'ML3':
-    df2 = ALL_data_fit_values_v5   
-  if data_version == 'GA1':
-    df2 = ALL_data_fit_values_v6       
+    df2 = ALL_data_fit_values_v4       
   if data_version == 'ST2':
     df2 = ALL_data_fit_values_v2  
   A = dcc.RangeSlider(id = "temp-range-slider",
@@ -328,11 +298,7 @@ def display_click_data(data_version):
   if data_version == 'ML1':
     df2 = ALL_data_fit_values_v3  
   if data_version == 'ML2':
-    df2 = ALL_data_fit_values_v4   
-  if data_version == 'ML3':
-    df2 = ALL_data_fit_values_v5     
-  if data_version == 'GA1':
-    df2 = ALL_data_fit_values_v6       
+    df2 = ALL_data_fit_values_v4         
   if data_version == 'ST2':
     df2 = ALL_data_fit_values_v2  
   A = dcc.RangeSlider(
@@ -358,11 +324,7 @@ def display_click_data(data_version):
   if data_version == 'ML1':
     df2 = ALL_data_fit_values_v3 
   if data_version == 'ML2':
-    df2 = ALL_data_fit_values_v4 
-  if data_version == 'ML3':
-    df2 = ALL_data_fit_values_v5     
-  if data_version == 'GA1':
-    df2 = ALL_data_fit_values_v6       
+    df2 = ALL_data_fit_values_v4      
   if data_version == 'ST2':
     df2 = ALL_data_fit_values_v2  
   A = dcc.RangeSlider(id='LD-range-slider',
@@ -397,11 +359,7 @@ def update_figure(TEMP, LP, vnt, LD, PP, MSE,  data_version, x_value, y_value, z
   if data_version == 'ML1':
     df2 = ALL_data_fit_values_v3   
   if data_version == 'ML2':
-    df2 = ALL_data_fit_values_v4   
-  if data_version == 'ML3':
-    df2 = ALL_data_fit_values_v5     
-  if data_version == 'GA1':
-    df2 = ALL_data_fit_values_v6       
+    df2 = ALL_data_fit_values_v4  
   if data_version == 'ST2':
     df2 = ALL_data_fit_values_v2     
   filtered_df = df2[(df2['PP']< PP)&(df2['MSE']< MSE)&
@@ -470,22 +428,6 @@ def display_click_data(data_version):
 * **Heaters**: 2x4.2 ohm thick film (magnetic)
 * **Cell**: Cs
 * **Notes**: 400 loop'''
-  if data_version == 'ML3':  
-    A = '''
-* **Testing type**: M-LOOP for parameter space (Temp: 100-130C, Laser power: 350-800 μW, Laser detuning: 0-10 GHz)
-* **Heater Driver**: MOSFET, 150kHz, square
-* **Coil Drivers**: DAQ
-* **Heaters**: 2x4.2 ohm thick film (magnetic)
-* **Cell**: Cs
-* **Notes**: 166 loop'''
-  if data_version == 'GA3':  
-    A = '''
-* **Testing type**: Genetic Algorithm for parameter space (Temp: 100-130C, Laser power: 350-800 μW, Laser detuning: 0-10 GHz)
-* **Heater Driver**: MOSFET, 150kHz, square
-* **Coil Drivers**: DAQ
-* **Heaters**: 2x4.2 ohm thick film (magnetic)
-* **Cell**: Cs
-* **Notes**: '''
   else:
     A = '''
 * **Testing type**: Systematic of all parameter space 
@@ -513,11 +455,7 @@ def update_figure(TEMP, LP, vnt, LD, PP, MSE, col, data_version):
   if data_version == 'ML1':
     df2 = ALL_data_fit_values_v3    
   if data_version == 'ML2':
-    df2 = ALL_data_fit_values_v4 
-  if data_version == 'ML3':
-    df2 = ALL_data_fit_values_v5   
-  if data_version == 'GA1':
-    df2 = ALL_data_fit_values_v6      
+    df2 = ALL_data_fit_values_v4    
   if data_version == 'ST2':
     df2 = ALL_data_fit_values_v2 
   filtered_df = df2[(df2['PP']< PP)&(df2['MSE']< MSE)&
@@ -539,11 +477,7 @@ def display_click_data(clickData, data_version):
   if data_version == 'ML1':
     df2 = ALL_data_fit_values_v3   
   if data_version == 'ML2':
-    df2 = ALL_data_fit_values_v4  
-  if data_version == 'ML3':
-    df2 = ALL_data_fit_values_v5    
-  if data_version == 'GA1':
-    df2 = ALL_data_fit_values_v6      
+    df2 = ALL_data_fit_values_v4     
   if data_version == 'ST2':
     df2 = ALL_data_fit_values_v2 
   if clickData == None:
@@ -625,11 +559,7 @@ def update_figure(TEMP, LP, vnt, LD, PP, MSE, col, data_version):
   if data_version == 'ML1':
     df2 = ALL_data_fit_values_v3   
   if data_version == 'ML2':
-    df2 = ALL_data_fit_values_v4  
-  if data_version == 'ML3':
-    df2 = ALL_data_fit_values_v5    
-  if data_version == 'GA1':
-    df2 = ALL_data_fit_values_v6      
+    df2 = ALL_data_fit_values_v4    
   if data_version == 'ST2':
     df2 = ALL_data_fit_values_v2 
   filtered_df = df2[(df2['PP']< PP)&(df2['MSE']< MSE)&
@@ -658,11 +588,7 @@ def on_trace_click(clickData, data_version):
     if data_version == 'ML1':
         df2 = ALL_data_fit_values_v3   
     if data_version == 'ML2':
-        df2 = ALL_data_fit_values_v4 
-    if data_version == 'ML3':
-        df2 = ALL_data_fit_values_v5  
-    if data_version == 'GA1':
-        df2 = ALL_data_fit_values_v6          
+        df2 = ALL_data_fit_values_v4          
     if data_version == 'ST2':
         df2 = ALL_data_fit_values_v2 
     if clickData== None:
@@ -698,11 +624,7 @@ def on_trace_click(clickData, data_version):
     if data_version == 'ML1':
         df2 = ALL_data_fit_values_v3    
     if data_version == 'ML2':
-        df2 = ALL_data_fit_values_v4   
-    if data_version == 'ML3':
-        df2 = ALL_data_fit_values_v5     
-    if data_version == 'GA1':
-        df2 = ALL_data_fit_values_v6          
+        df2 = ALL_data_fit_values_v4           
     if data_version == 'ST2':
         df2 = ALL_data_fit_values_v2 
     if clickData== None:
@@ -742,12 +664,6 @@ def update_figure(clickData, data_version):
     if data_version == 'ML2':
         df2 = ALL_data_fit_values_v4 
         Github_urls = Github_urls_v4   
-    if data_version == 'ML3':
-        df2 = ALL_data_fit_values_v5 
-        Github_urls = Github_urls_v5
-    if data_version == 'GA1':
-        df2 = ALL_data_fit_values_v6    
-        Github_urls = Github_urls_v6
     if data_version == 'ST2':
         df2 = ALL_data_fit_values_v2 
         Github_urls = Github_urls_v2
@@ -804,13 +720,7 @@ def display_click_data(clickData2, clickData, data_version):
         Github_urls = Github_urls_v3  
     if data_version == 'ML2':
         df2 = ALL_data_fit_values_v4 
-        Github_urls = Github_urls_v4       
-    if data_version == 'ML3':
-        df2 = ALL_data_fit_values_v5 
-        Github_urls = Github_urls_v5  
-    if data_version == 'GA1':
-        df2 = ALL_data_fit_values_v6    
-        Github_urls = Github_urls_v6        
+        Github_urls = Github_urls_v4           
     if data_version == 'ST2':
         df2 = ALL_data_fit_values_v2 
         Github_urls = Github_urls_v2
@@ -869,13 +779,7 @@ def display_click_data(clickData2, clickData, data_version):
         Github_urls = Github_urls_v3   
     if data_version == 'ML2':
         df2 = ALL_data_fit_values_v4 
-        Github_urls = Github_urls_v4   
-    if data_version == 'ML3':
-        df2 = ALL_data_fit_values_v5 
-        Github_urls = Github_urls_v5      
-    if data_version == 'GA1':
-        df2 = ALL_data_fit_values_v6    
-        Github_urls = Github_urls_v6        
+        Github_urls = Github_urls_v4     
     if data_version == 'ST2':
         df2 = ALL_data_fit_values_v2 
         Github_urls = Github_urls_v2  
@@ -940,13 +844,7 @@ def display_click_data(clickData2, clickData, data_version):
         Github_urls = Github_urls_v3    
     if data_version == 'ML2':
         df2 = ALL_data_fit_values_v4 
-        Github_urls = Github_urls_v4     
-    if data_version == 'ML3':
-        df2 = ALL_data_fit_values_v5 
-        Github_urls = Github_urls_v5     
-    if data_version == 'GA1':
-        df2 = ALL_data_fit_values_v6    
-        Github_urls = Github_urls_v6        
+        Github_urls = Github_urls_v4         
     if data_version == 'ST2':
         df2 = ALL_data_fit_values_v2 
         Github_urls = Github_urls_v2       
