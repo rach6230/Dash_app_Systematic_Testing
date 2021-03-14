@@ -54,6 +54,13 @@ colors = {
     'text': '#7FDBFF'
 }
 
+## Version details
+Version = '''
+* **Cell**: Cs
+* **Coil Drivers**: DAQ
+* **Heater Driver**: MOSFET, 150kHz, square
+* **Heaters**: 2x4.2 ohm thick film (magnetic)'''
+
 ########### Initiate the app
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
@@ -86,6 +93,9 @@ app.layout = html.Div(children=[
                         html.Div(id='MSE_slider-drag-output', style={'margin-top': 20,'fontSize': 12}),
                         html.Div(id = 'MSE_slider_container'), 
                         html.Br(), #new line
+                        html.P('Experiment Version Details:'),
+                        dcc.Markdown(Version, style={'fontSize': 12}),
+                        html.Br(), #new line                        
                         html.P('Data Set Details:'),
                         dcc.Markdown(id='Markdown_notes', style={'fontSize': 12}),
                       ]
@@ -406,35 +416,20 @@ def show_hide_element(visibility_state):
 def display_click_data(data_version):
   if data_version == 'ST1':
     A = '''
-* **Testing type**: Systematic of all parameter space 
-* **Heater Driver**: Audio Amp, 100kHz, Sine
-* **Coil Drivers**: DAQ
-* **Heaters**: 2x4.2 ohm thick film (magnetic)
-* **Cell**: Cs
-* **Notes**: Laser power not varying correctly during scans, all values taken at approx ~100uW'''
+* **Testing type**: Systematic of all parameter space (Temp: 60-120C, Laser power: 70-350 μW, Laser detuning: -40 to 10 GHz)
+* **Notes**: Laser power not varying correctly during scans, all values taken at approx ~100uW. 
+    Also heater driver not as stated in experiment details, used: Audio Amp, 100kHz, Sine, '''
   if data_version == 'ML1':  
     A = '''
 * **Testing type**: M-LOOP for parameter space (Temp: 100-130C, Laser power: 350-800 μW, Laser detuning: 0-10 GHz)
-* **Heater Driver**: MOSFET, 150kHz, square
-* **Coil Drivers**: DAQ
-* **Heaters**: 2x4.2 ohm thick film (magnetic)
-* **Cell**: Cs
 * **Notes**: 45 loop (Potential 1.4 phase RF during data collection)'''
   if data_version == 'ML2':  
     A = '''
 * **Testing type**: M-LOOP for parameter space (Temp: 100-130C, Laser power: 350-800 μW, Laser detuning: 0-10 GHz)
-* **Heater Driver**: MOSFET, 150kHz, square
-* **Coil Drivers**: DAQ
-* **Heaters**: 2x4.2 ohm thick film (magnetic)
-* **Cell**: Cs
 * **Notes**: 400 loop'''
   else:
     A = '''
-* **Testing type**: Systematic of all parameter space 
-* **Heater Driver**: MOSFET, 150kHz, square
-* **Coil Drivers**: DAQ
-* **Heaters**: 2x4.2 ohm thick film (magnetic)
-* **Cell**: Cs
+* **Testing type**: Systematic of all parameter space (Temp: 60-120C, Laser power: 70-350 μW, Laser detuning: -40 to 10 GHz)
 * **Notes**: '''
   return A
 
